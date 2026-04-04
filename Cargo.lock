@@ -20,6 +20,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "rasm-diagnostics"
+version = "0.1.0"
+
+[[package]]
 name = "rasm-lexer"
 version = "0.1.0"
 dependencies = [
@@ -32,7 +36,16 @@ name = "rasm-parser"
 version = "0.1.0"
 dependencies = [
  "rasm-ast",
+ "rasm-diagnostics",
  "rasm-lexer",
+ "rasm-session",
+ "rasm-span",
+]
+
+[[package]]
+name = "rasm-session"
+version = "0.1.0"
+dependencies = [
  "rasm-span",
 ]
 

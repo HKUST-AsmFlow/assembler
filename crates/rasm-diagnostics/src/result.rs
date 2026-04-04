@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-pub mod nodes;
-pub mod token;
-pub mod tokenstream;
+use crate::diagnostic::Diagnostic;
+
+pub type DiagnosticResult<T> = Result<T, Vec<Diagnostic>>;

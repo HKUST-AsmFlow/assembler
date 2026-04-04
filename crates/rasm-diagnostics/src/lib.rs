@@ -14,29 +14,9 @@
  * limitations under the License.
  */
 
-use rasm_ast::nodes::Program;
-use rasm_lexer::token::{Token, TokenKind};
+#![feature(negative_impls)]
 
-use crate::{
-    error::ParseResult,
-    parser::{Parseable, Parser},
-};
+pub mod diagnostic;
+pub mod result;
 
-impl<I> Parseable<Program> for Parser<I>
-where
-    I: Iterator<Item = Token>,
-{
-    fn parse(&mut self) -> ParseResult<Program> {
-        let mut lines = Vec::new();
-
-        while let Some(token) = self.peek() {
-            if token.kind == TokenKind::Eof {
-                break;
-            }
-
-            lines.push(self.parse()?);
-        }
-
-        Ok(Program { lines })
-    }
-}
+pub use result::DiagnosticResult;

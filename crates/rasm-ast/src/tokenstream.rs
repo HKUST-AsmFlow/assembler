@@ -14,6 +14,32 @@
  * limitations under the License.
  */
 
-pub mod nodes;
-pub mod token;
-pub mod tokenstream;
+use std::sync::Arc;
+
+use rasm_span::Span;
+
+use crate::token::{Delimiter, Token};
+
+pub enum TokenTree {
+    Singleton(Token),
+    Delimited(DelimiterSpans, Delimiter, TokenStream),
+}
+
+pub struct DelimiterSpans {
+    pub open: Span,
+    pub close: Span,
+}
+
+impl DelimiterSpans {
+    pub fn new(open: Span, close: Span) -> Self {
+        Self { open, close }
+    }
+}
+
+pub struct TokenStream(pub(crate) Arc<Vec<TokenTree>>);
+
+impl TokenStream {
+    pub fn new(buf: Vec<TokenTree>) -> Self {
+        Self(Arc::new(buf))
+    }
+}

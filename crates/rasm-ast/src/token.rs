@@ -13,15 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 use rasm_span::Span;
 
-pub enum TokenKind {
-    Eof,
+#[derive(Eq, PartialEq)]
+pub enum Delimiter {
+    Bracket,
 }
 
+#[derive(Clone, Eq, PartialEq)]
+pub enum TokenKind {
+    Colon,
+    Comma,
+    Dot,
+    Identifier(String),
+    Eof,
+    LeftBracket,
+    RightBracket,
+}
+
+impl TokenKind {
+    pub fn close_delimiter(&self) -> Option<Delimiter> {
+        match self {
+            Self::RightBracket => Some(Delimiter::Bracket),
+            _ => None,
+        }
+    }
+
+    pub fn open_delimiter(&self) -> Option<Delimiter> {
+        match self {
+            Self::LeftBracket => Some(Delimiter::Bracket),
+            _ => None,
+        }
+    }
+}
+
+#[derive(Clone)]
 pub struct Token {
-    kind: TokenKind,
-    span: Span,
+    pub kind: TokenKind,
+    pub span: Span,
 }
 
 impl Token {

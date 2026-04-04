@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-use rasm_ast::nodes::Line;
-use rasm_lexer::token::{Token, TokenKind};
+use std::sync::Arc;
 
-use crate::{
-    error::{ParseError, ParseErrorKind, ParseResult},
-    parser::{Parseable, Parser},
-};
+use rasm_span::sourcemap::SourceMap;
 
-impl<I> Parseable<Line> for Parser<I>
-where
-    I: Iterator<Item = Token>,
-{
-    fn parse(&mut self) -> ParseResult<Line> {
-        let token = self
-            .peek()
-            .ok_or(ParseError::new(ParseErrorKind::UnexpectedEof))?;
-        Ok(match token.kind {
-            TokenKind::Dot => Line::Directive(self.parse()?),
-            _ => todo!(),
-        })
+pub struct ParserSession {
+    source_map: Arc<SourceMap>,
+}
+
+impl ParserSession {
+    #[inline]
+    pub fn source_map(&self) -> &Arc<SourceMap> {
+        &self.source_map
     }
 }

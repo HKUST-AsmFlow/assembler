@@ -14,68 +14,12 @@
  * limitations under the License.
  */
 
-use std::iter::Peekable;
-
-use rasm_lexer::token::{Token, TokenKind};
+use rasm_session::parse::ParserSession;
 use rasm_span::sourcemap::SourceMap;
 
-use crate::error::{ParseError, ParseErrorKind, ParseResult};
-
-mod directive;
-mod line;
-mod program;
-
-pub struct Parser<I>
-where
-    I: Iterator<Item = Token>,
-{
+pub struct Parser<'session> {
+    session: &'session ParserSession,
     source_map: SourceMap,
-    tokens: Peekable<I>,
 }
 
-impl<I> Parser<I>
-where
-    I: Iterator<Item = Token>,
-{
-    pub fn new(iter: I, source_map: SourceMap) -> Self {
-        Self {
-            source_map,
-            tokens: iter.peekable(),
-        }
-    }
-
-    pub(crate) fn bump(&mut self) -> Option<Token> {
-        self.tokens.next()
-    }
-
-    pub(crate) fn expect(&mut self, kind: TokenKind) -> ParseResult<Token> {
-        self.skip(&[TokenKind::Whitespace]);
-
-        match self.bump() {
-            Some(token) if token.kind == kind => Ok(token),
-            Some(token) => Err(ParseError::new(ParseErrorKind::UnexpectedToken {
-                expected: kind,
-                found: token.kind,
-            })),
-            None => Err(ParseError::new(ParseErrorKind::UnexpectedEof)),
-        }
-    }
-
-    pub(crate) fn peek(&mut self) -> Option<&Token> {
-        self.tokens.peek()
-    }
-
-    pub(crate) fn skip(&mut self, kinds: impl AsRef<[TokenKind]>) {
-        while let Some(token) = self.peek() {
-            if kinds.as_ref().contains(&token.kind) {
-                self.bump();
-            } else {
-                break;
-            }
-        }
-    }
-}
-
-pub trait Parseable<T> {
-    fn parse(&mut self) -> ParseResult<T>;
-}
+impl<'session> Parser<'session> {}
