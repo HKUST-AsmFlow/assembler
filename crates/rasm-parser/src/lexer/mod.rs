@@ -41,16 +41,41 @@ impl<'str> Cursor<'str> {
 
     pub(crate) fn number(&mut self) -> TokenKind {
         let kind = TokenKind::Number;
+
+        if ['+', '-'].contains(&self.peek()) {
+            self.bump();
+        }
+        
         let base = match self.peek() {
             'b' => NumericBase::Binary,
             'o' => NumericBase::Octal,
             'x' => NumericBase::Hexadecimal,
             _ => NumericBase::Decimal,
         };
+        self.bump();
 
         self.bump_while(|c| c.is_digit(base.as_radix()));
 
         kind(base)
+    }
+
+    pub(crate) fn string(&mut self) -> TokenKind {
+        let mut terminated = false;
+
+        while let Some(c) = self.bump() {
+            match c {
+                '"' => {
+                    terminated = true;
+                    break;
+                }
+                '\\' if ['\\', '\"'].contains(&self.peek()) => {
+                    self.bump();
+                }
+                _ => (),
+            }
+        }
+
+        TokenKind::String { terminated }
     }
 
     pub(crate) fn whitespace(&mut self) -> TokenKind {
@@ -70,8 +95,10 @@ impl<'str> Cursor<'str> {
             ';' => self.comment(),
             c if c.is_xid_start() => self.identifier(),
             '#' => self.number(),
+            '"' => self.string(),
             c if c.is_whitespace() => self.whitespace(),
 
+            ':' => TokenKind::Colon,
             ',' => TokenKind::Comma,
             '.' => TokenKind::Dot,
             '[' => TokenKind::LeftBracket,

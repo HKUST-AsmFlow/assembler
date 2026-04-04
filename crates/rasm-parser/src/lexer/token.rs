@@ -35,6 +35,7 @@ impl NumericBase {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TokenKind {
+    Colon,
     Comment,
     Comma,
     Dot,
@@ -44,6 +45,7 @@ pub enum TokenKind {
     LineBreak,
     Number(NumericBase),
     RightBracket,
+    String { terminated: bool },
     Unknown,
     Whitespace,
 }
