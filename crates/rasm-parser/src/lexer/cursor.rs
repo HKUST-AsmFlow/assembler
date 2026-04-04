@@ -31,8 +31,19 @@ impl<'src> Cursor<'src> {
         }
     }
 
+    pub(crate) fn as_str(&self) -> &'src str {
+        self.chars.as_str()
+    }
+
     pub(crate) fn bump(&mut self) -> Option<char> {
         self.chars.next()
+    }
+
+    pub(crate) fn bump_until(&mut self, b: u8) {
+        self.chars = memchr::memchr(b, self.as_str().as_bytes())
+            .map(|index| &self.as_str()[index..])
+            .unwrap_or("")
+            .chars();
     }
 
     pub(crate) fn bump_while<F>(&mut self, predicate: F)

@@ -7,4 +7,5 @@ rust-version = { workspace = true }
 version = { workspace = true }
 
 [dependencies]
+memchr = { workspace = true }
 unicode-ident = { workspace = true }

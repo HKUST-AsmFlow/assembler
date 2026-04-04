@@ -15,15 +15,37 @@
  */
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum NumericBase {
+    Binary,
+    Decimal,
+    Hexadecimal,
+    Octal,
+}
+
+impl NumericBase {
+    pub fn as_radix(self) -> u32 {
+        match self {
+            NumericBase::Binary => 2,
+            NumericBase::Decimal => 10,
+            NumericBase::Hexadecimal => 16,
+            NumericBase::Octal => 8,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TokenKind {
+    Comment,
     Comma,
     Dot,
     Eof,
     Identifier,
     LeftBracket,
-    Newline,
+    LineBreak,
+    Number(NumericBase),
     RightBracket,
     Unknown,
+    Whitespace,
 }
 
 #[derive(Debug)]

@@ -18,7 +18,7 @@ use std::iter;
 
 use crate::lexer::{
     cursor::Cursor,
-    token::{Token, TokenKind},
+    token::{NumericBase, Token, TokenKind},
     utils::UnicodeCharUtils,
 };
 
@@ -27,10 +27,36 @@ mod token;
 mod utils;
 
 impl<'str> Cursor<'str> {
+    pub(crate) fn comment(&mut self) -> TokenKind {
+        self.bump_until(b'\n');
+
+        TokenKind::Comment
+    }
+
     pub(crate) fn identifier(&mut self) -> TokenKind {
         self.bump_while(char::is_xid_continue);
 
         TokenKind::Identifier
+    }
+
+    pub(crate) fn number(&mut self) -> TokenKind {
+        let kind = TokenKind::Number;
+        let base = match self.peek() {
+            'b' => NumericBase::Binary,
+            'o' => NumericBase::Octal,
+            'x' => NumericBase::Hexadecimal,
+            _ => NumericBase::Decimal,
+        };
+
+        self.bump_while(|c| c.is_digit(base.as_radix()));
+
+        kind(base)
+    }
+
+    pub(crate) fn whitespace(&mut self) -> TokenKind {
+        self.bump_while(char::is_whitespace);
+
+        TokenKind::Whitespace
     }
 
     pub fn next_token(&mut self) -> Token {
@@ -39,7 +65,12 @@ impl<'str> Cursor<'str> {
         };
 
         let kind = match c {
+            '\n' => TokenKind::LineBreak,
+
+            ';' => self.comment(),
             c if c.is_xid_start() => self.identifier(),
+            '#' => self.number(),
+            c if c.is_whitespace() => self.whitespace(),
 
             ',' => TokenKind::Comma,
             '.' => TokenKind::Dot,
