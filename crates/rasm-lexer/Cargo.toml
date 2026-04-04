@@ -1,5 +1,5 @@
 [package]
-name = "rasm-parser"
+name = "rasm-lexer"
 authors = { workspace = true }
 edition = { workspace = true }
 license = { workspace = true }
@@ -7,6 +7,5 @@ rust-version = { workspace = true }
 version = { workspace = true }
 
 [dependencies]
-rasm-ast = { workspace = true }
-rasm-lexer = { workspace = true }
-rasm-span = { workspace = true }
+memchr = { workspace = true }
+unicode-ident = { workspace = true }

@@ -15,13 +15,7 @@
  */
 
 use rasm_ast::token::Token;
-
-use crate::lexer::cursor::Cursor;
-
-mod cursor;
-mod cursor_impl;
-pub mod token;
-mod utils;
+use rasm_lexer::cursor::Cursor;
 
 pub struct Lexer<'src> {
     cursor: Cursor<'src>,

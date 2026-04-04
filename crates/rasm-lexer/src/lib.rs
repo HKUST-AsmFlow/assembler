@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-use rasm_lexer::token::TokenKind;
+use std::iter;
 
-pub enum ParseErrorKind {
-    UnexpectedEof,
-    UnexpectedToken {
-        expected: TokenKind,
-        found: TokenKind,
-    },
+use crate::{
+    cursor::Cursor,
+    token::{Token, TokenKind},
+};
+
+pub mod cursor;
+mod cursor_impl;
+pub mod token;
+mod utils;
+
+pub fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
+    let mut cursor = Cursor::new(input);
+
+    iter::from_fn(move || {
+        let token = cursor.next_token();
+        if token.kind != TokenKind::Eof {
+            Some(token)
+        } else {
+            None
+        }
+    })
 }
-
-pub struct ParseError {
-    kind: ParseErrorKind,
-}
-
-impl ParseError {
-    pub fn new(kind: ParseErrorKind) -> Self {
-        Self { kind }
-    }
-}
-
-pub type ParseResult<T> = Result<T, ParseError>;

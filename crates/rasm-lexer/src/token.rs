@@ -57,7 +57,7 @@ pub struct Token {
 }
 
 impl Token {
-    pub(crate) fn new(kind: TokenKind, length: usize) -> Self {
+    pub fn new(kind: TokenKind, length: usize) -> Self {
         Self { kind, length }
     }
 }

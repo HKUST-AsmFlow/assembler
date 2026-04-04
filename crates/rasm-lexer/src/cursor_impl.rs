@@ -1,23 +1,23 @@
-use crate::lexer::{
+use crate::{
     cursor::Cursor,
     token::{NumericBase, Token, TokenKind},
     utils::UnicodeCharUtils,
 };
 
 impl<'src> Cursor<'src> {
-    pub(crate) fn comment(&mut self) -> TokenKind {
+    pub fn comment(&mut self) -> TokenKind {
         self.bump_until(b'\n');
 
         TokenKind::Comment
     }
 
-    pub(crate) fn identifier(&mut self) -> TokenKind {
+    pub fn identifier(&mut self) -> TokenKind {
         self.bump_while(char::is_xid_continue);
 
         TokenKind::Identifier
     }
 
-    pub(crate) fn number(&mut self) -> TokenKind {
+    pub fn number(&mut self) -> TokenKind {
         let kind = TokenKind::Number;
 
         if ['+', '-'].contains(&self.peek()) {
@@ -37,7 +37,7 @@ impl<'src> Cursor<'src> {
         kind(base)
     }
 
-    pub(crate) fn string(&mut self) -> TokenKind {
+    pub fn string(&mut self) -> TokenKind {
         let mut terminated = false;
 
         while let Some(c) = self.bump() {
@@ -56,7 +56,7 @@ impl<'src> Cursor<'src> {
         TokenKind::String { terminated }
     }
 
-    pub(crate) fn whitespace(&mut self) -> TokenKind {
+    pub fn whitespace(&mut self) -> TokenKind {
         self.bump_while(char::is_whitespace);
 
         TokenKind::Whitespace

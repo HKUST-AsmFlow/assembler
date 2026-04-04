@@ -15,10 +15,10 @@
  */
 
 use rasm_ast::Directive;
+use rasm_lexer::token::{Token, TokenKind};
 
 use crate::{
     error::ParseResult,
-    lexer::token::{Token, TokenKind},
     parser::{Parseable, Parser},
 };
 

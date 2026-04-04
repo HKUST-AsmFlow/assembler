@@ -16,12 +16,10 @@
 
 use std::iter::Peekable;
 
+use rasm_lexer::token::{Token, TokenKind};
 use rasm_span::sourcemap::SourceMap;
 
-use crate::{
-    error::{ParseError, ParseErrorKind, ParseResult},
-    lexer::token::{Token, TokenKind},
-};
+use crate::error::{ParseError, ParseErrorKind, ParseResult};
 
 mod directive;
 mod line;

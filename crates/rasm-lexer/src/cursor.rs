@@ -24,29 +24,29 @@ pub struct Cursor<'src> {
 impl<'src> Cursor<'src> {
     pub const EOF_CHAR: char = '\0';
 
-    pub(crate) fn new(input: &'src str) -> Self {
+    pub fn new(input: &'src str) -> Self {
         Self {
             chars: input.chars(),
             remaining_length: input.len(),
         }
     }
 
-    pub(crate) fn as_str(&self) -> &'src str {
+    pub fn as_str(&self) -> &'src str {
         self.chars.as_str()
     }
 
-    pub(crate) fn bump(&mut self) -> Option<char> {
+    pub fn bump(&mut self) -> Option<char> {
         self.chars.next()
     }
 
-    pub(crate) fn bump_until(&mut self, b: u8) {
+    pub fn bump_until(&mut self, b: u8) {
         self.chars = memchr::memchr(b, self.as_str().as_bytes())
             .map(|index| &self.as_str()[index..])
             .unwrap_or("")
             .chars();
     }
 
-    pub(crate) fn bump_while<F>(&mut self, predicate: F)
+    pub fn bump_while<F>(&mut self, predicate: F)
     where
         F: Fn(char) -> bool,
     {
@@ -55,19 +55,19 @@ impl<'src> Cursor<'src> {
         }
     }
 
-    pub(crate) fn is_eof(&self) -> bool {
+    pub fn is_eof(&self) -> bool {
         self.chars.as_str().is_empty()
     }
 
-    pub(crate) fn position_within_token(&self) -> usize {
+    pub fn position_within_token(&self) -> usize {
         self.remaining_length - self.chars.as_str().len()
     }
 
-    pub(crate) fn peek(&self) -> char {
+    pub fn peek(&self) -> char {
         self.chars.clone().next().unwrap_or(Self::EOF_CHAR)
     }
 
-    pub(crate) fn reset_position_within_token(&mut self) {
+    pub fn reset_position_within_token(&mut self) {
         self.remaining_length = self.chars.as_str().len();
     }
 }
