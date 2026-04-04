@@ -1,0 +1,11 @@
+---
+source: crates/rasm-parser/tests/lexer.rs
+assertion_line: 6
+expression: tokens
+---
+[
+    Token {
+        kind: Comment,
+        length: 24,
+    },
+]

@@ -9,5 +9,6 @@ version = { workspace = true }
 [dependencies]
 rasm-ast = { workspace = true }
 
+insta = { workspace = true }
 memchr = { workspace = true }
 unicode-ident = { workspace = true }
