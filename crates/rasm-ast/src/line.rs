@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-use crate::line::Line;
-
-pub struct Program {
-    pub lines: Vec<Line>,
+pub enum Line {
+    Directive,
+    Label,
+    Instruction,
 }

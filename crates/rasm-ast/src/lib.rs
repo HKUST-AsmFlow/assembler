@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+pub mod line;
 pub mod program;
 
+pub use line::Line;
 pub use program::Program;

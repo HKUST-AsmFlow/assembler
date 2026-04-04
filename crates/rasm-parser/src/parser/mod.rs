@@ -18,6 +18,9 @@ use std::iter::Peekable;
 
 use crate::lexer::token::Token;
 
+mod line;
+mod program;
+
 pub struct Parser<I>
 where
     I: Iterator<Item = Token>,

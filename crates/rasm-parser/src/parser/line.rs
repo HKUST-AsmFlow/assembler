@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-use crate::line::Line;
+use rasm_ast::Line;
 
-pub struct Program {
-    pub lines: Vec<Line>,
+use crate::{error::ParseResult, lexer::token::Token, parser::Parser};
+
+impl<I> Parser<I>
+where
+    I: Iterator<Item = Token>,
+{
+    pub(crate) fn parse_line(&mut self) -> ParseResult<Line> {
+        // todo
+        Ok(Line::Directive)
+    }
 }

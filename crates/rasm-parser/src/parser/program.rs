@@ -14,8 +14,29 @@
  * limitations under the License.
  */
 
-use crate::line::Line;
+use rasm_ast::Program;
 
-pub struct Program {
-    pub lines: Vec<Line>,
+use crate::{
+    error::ParseResult,
+    lexer::token::{Token, TokenKind},
+    parser::Parser,
+};
+
+impl<I> Parser<I>
+where
+    I: Iterator<Item = Token>,
+{
+    pub(crate) fn parse_program(&mut self) -> ParseResult<Program> {
+        let mut lines = Vec::new();
+
+        while let Some(token) = self.peek() {
+            if token.kind == TokenKind::Eof {
+                break;
+            }
+
+            lines.push(self.parse_line()?);
+        }
+
+        Ok(Program { lines })
+    }
 }
