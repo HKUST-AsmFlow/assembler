@@ -117,9 +117,9 @@ impl<'str> Cursor<'str> {
 }
 
 pub fn tokenize(
+    name: &str,
     input: &str,
     source_map: &mut SourceMap,
-    name: &str,
 ) -> impl Iterator<Item = Token> {
     source_map.add_source_file(name.to_string(), input.to_string());
 

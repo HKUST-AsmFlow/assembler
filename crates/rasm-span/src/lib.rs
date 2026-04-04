@@ -15,3 +15,6 @@
  */
 
 pub mod sourcemap;
+pub mod span;
+
+pub use span::Span;

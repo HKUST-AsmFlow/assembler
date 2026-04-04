@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-use std::{iter::Peekable, sync::Arc};
+use std::iter::Peekable;
 
 use rasm_span::sourcemap::SourceMap;
 
@@ -31,7 +31,7 @@ pub struct Parser<I>
 where
     I: Iterator<Item = Token>,
 {
-    source_map: Arc<SourceMap>,
+    source_map: SourceMap,
     tokens: Peekable<I>,
 }
 
@@ -39,9 +39,9 @@ impl<I> Parser<I>
 where
     I: Iterator<Item = Token>,
 {
-    pub(crate) fn new(iter: I, source_map: SourceMap) -> Self {
+    pub fn new(iter: I, source_map: SourceMap) -> Self {
         Self {
-            source_map: Arc::new(source_map),
+            source_map,
             tokens: iter.peekable(),
         }
     }
