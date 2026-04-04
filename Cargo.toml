@@ -11,6 +11,7 @@ version = "0.1.0"
 
 [workspace.dependencies]
 rasm-ast = { path = "crates/rasm-ast" }
+rasm-span = { path = "crates/rasm-span" }
 
 insta = "1.47.2"
 memchr = "2.8.0"

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-use std::iter::Peekable;
+use std::{iter::Peekable, sync::Arc};
+
+use rasm_span::sourcemap::SourceMap;
 
 use crate::{
     error::{ParseError, ParseErrorKind, ParseResult},
@@ -29,6 +31,7 @@ pub struct Parser<I>
 where
     I: Iterator<Item = Token>,
 {
+    source_map: Arc<SourceMap>,
     tokens: Peekable<I>,
 }
 
@@ -36,8 +39,9 @@ impl<I> Parser<I>
 where
     I: Iterator<Item = Token>,
 {
-    pub(crate) fn new(iter: I) -> Self {
+    pub(crate) fn new(iter: I, source_map: SourceMap) -> Self {
         Self {
+            source_map: Arc::new(source_map),
             tokens: iter.peekable(),
         }
     }

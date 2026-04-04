@@ -220,6 +220,7 @@ dependencies = [
  "insta",
  "memchr",
  "rasm-ast",
+ "rasm-span",
  "unicode-ident",
 ]
 

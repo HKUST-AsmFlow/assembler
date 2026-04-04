@@ -16,6 +16,8 @@
 
 use std::iter;
 
+use rasm_span::sourcemap::SourceMap;
+
 use crate::lexer::{
     cursor::Cursor,
     token::{NumericBase, Token, TokenKind},
@@ -114,7 +116,13 @@ impl<'str> Cursor<'str> {
     }
 }
 
-pub fn tokenize(input: &str) -> impl Iterator<Item = Token> {
+pub fn tokenize(
+    input: &str,
+    source_map: &mut SourceMap,
+    name: &str,
+) -> impl Iterator<Item = Token> {
+    source_map.add_source_file(name.to_string(), input.to_string());
+
     let mut cursor = Cursor::new(input);
     iter::from_fn(move || {
         let token = cursor.next_token();

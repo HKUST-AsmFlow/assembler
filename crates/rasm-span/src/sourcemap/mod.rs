@@ -34,4 +34,15 @@ impl SourceMap {
             next_start_pos: 0,
         }
     }
+
+    pub fn add_source_file(&mut self, name: String, source: String) {
+        let next_idx = self.files.len();
+        let start_pos = self.next_start_pos;
+
+        let file = Arc::new(SourceFile::new(source, name.clone(), start_pos));
+        self.files.push(file);
+        self.map.insert(name, next_idx);
+
+        self.next_start_pos += self.files.last().unwrap().content.len() + 1;
+    }
 }

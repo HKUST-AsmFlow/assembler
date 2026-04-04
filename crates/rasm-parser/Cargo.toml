@@ -8,6 +8,7 @@ version = { workspace = true }
 
 [dependencies]
 rasm-ast = { workspace = true }
+rasm-span = { workspace = true }
 
 insta = { workspace = true }
 memchr = { workspace = true }

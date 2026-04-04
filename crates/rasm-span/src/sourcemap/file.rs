@@ -22,3 +22,24 @@ pub struct SourceFile {
     pub line_starts: Vec<u32>,
     pub start_pos: usize,
 }
+
+impl SourceFile {
+    pub fn new(content: String, name: String, start_pos: usize) -> Self {
+        let lines = content
+            .lines()
+            .scan(0, |acc, line| {
+                let start = *acc;
+                *acc += line.len() as u32 + 1;
+
+                Some(start)
+            })
+            .collect();
+
+        Self {
+            content: Arc::from(content),
+            name,
+            line_starts: lines,
+            start_pos,
+        }
+    }
+}
