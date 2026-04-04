@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/crates/rasm-ast/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/crates/rasm-parser/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/crates/rasm-parser/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/rasm-span/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/crates/rasm/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>

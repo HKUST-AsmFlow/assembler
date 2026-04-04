@@ -224,6 +224,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "rasm-span"
+version = "0.1.0"
+
+[[package]]
 name = "rustix"
 version = "1.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
