@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use rasm_span::Span;
 
-pub mod directive;
-pub mod instruction;
-pub mod label;
-pub mod line;
-pub mod program;
-pub mod token;
+pub enum TokenKind {
+    Eof,
+}
 
-pub use directive::Directive;
-pub use instruction::Instruction;
-pub use label::Label;
-pub use line::Line;
-pub use program::Program;
+pub struct Token {
+    kind: TokenKind,
+    span: Span,
+}
+
+impl Token {
+    pub const DUMMY_TOKEN: Token = Token::new(TokenKind::Eof, Span::DUMMY_SPAN);
+
+    pub const fn new(kind: TokenKind, span: Span) -> Self {
+        Self { kind, span }
+    }
+}

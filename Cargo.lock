@@ -212,6 +212,9 @@ version = "0.1.0"
 [[package]]
 name = "rasm-ast"
 version = "0.1.0"
+dependencies = [
+ "rasm-span",
+]
 
 [[package]]
 name = "rasm-parser"

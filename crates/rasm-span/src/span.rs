@@ -21,7 +21,9 @@ pub struct Span {
 }
 
 impl Span {
-    pub fn new(lo: u32, len: u32) -> Self {
+    pub const DUMMY_SPAN: Span = Span::new(0, 0);
+
+    pub const fn new(lo: u32, len: u32) -> Self {
         Self { lo, len }
     }
 }
