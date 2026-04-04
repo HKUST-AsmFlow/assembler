@@ -14,26 +14,19 @@
  * limitations under the License.
  */
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum TokenKind {
-    Comma,
-    Dot,
-    Eof,
-    Identifier,
-    LeftBracket,
-    Newline,
-    RightBracket,
-    Unknown,
+#[allow(clippy::wrong_self_convention)]
+pub trait UnicodeCharUtils {
+    fn is_xid_continue(self) -> bool;
+
+    fn is_xid_start(self) -> bool;
 }
 
-#[derive(Debug)]
-pub struct Token {
-    pub kind: TokenKind,
-    pub length: usize,
-}
+impl UnicodeCharUtils for char {
+    fn is_xid_continue(self) -> bool {
+        unicode_ident::is_xid_continue(self)
+    }
 
-impl Token {
-    pub(crate) fn new(kind: TokenKind, length: usize) -> Self {
-        Self { kind, length }
+    fn is_xid_start(self) -> bool {
+        unicode_ident::is_xid_start(self)
     }
 }

@@ -16,22 +16,39 @@
 
 use std::iter;
 
-use crate::lexer::cursor::Cursor;
-use crate::lexer::token::{Token, TokenKind};
+use crate::lexer::{
+    cursor::Cursor,
+    token::{Token, TokenKind},
+    utils::UnicodeCharUtils,
+};
 
 mod cursor;
 mod token;
+mod utils;
 
 impl<'str> Cursor<'str> {
+    pub(crate) fn identifier(&mut self) -> TokenKind {
+        self.bump_while(char::is_xid_continue);
+
+        TokenKind::Identifier
+    }
+
     pub fn next_token(&mut self) -> Token {
         let Some(c) = self.bump() else {
             return Token::new(TokenKind::Eof, 0);
         };
 
         let kind = match c {
+            c if c.is_xid_start() => self.identifier(),
+
+            ',' => TokenKind::Comma,
+            '.' => TokenKind::Dot,
+            '[' => TokenKind::LeftBracket,
+            ']' => TokenKind::RightBracket,
+
             _ => TokenKind::Unknown,
         };
-        
+
         let token = Token::new(kind, self.position_within_token());
         self.reset_position_within_token();
 
@@ -43,6 +60,10 @@ pub fn tokenize(input: &str) -> impl Iterator<Item = Token> {
     let mut cursor = Cursor::new(input);
     iter::from_fn(move || {
         let token = cursor.next_token();
-        if token.kind != TokenKind::Eof { Some(token) } else { None}
+        if token.kind != TokenKind::Eof {
+            Some(token)
+        } else {
+            None
+        }
     })
 }

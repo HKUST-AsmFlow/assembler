@@ -35,6 +35,19 @@ impl<'src> Cursor<'src> {
         self.chars.next()
     }
 
+    pub(crate) fn bump_while<F>(&mut self, predicate: F)
+    where
+        F: Fn(char) -> bool,
+    {
+        while predicate(self.peek()) && !self.is_eof() {
+            self.bump();
+        }
+    }
+
+    pub(crate) fn is_eof(&self) -> bool {
+        self.chars.as_str().is_empty()
+    }
+
     pub(crate) fn position_within_token(&self) -> usize {
         self.remaining_length - self.chars.as_str().len()
     }
