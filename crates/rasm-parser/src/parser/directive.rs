@@ -18,10 +18,9 @@ use rasm_ast::Directive;
 
 use crate::{
     error::ParseResult,
-    lexer::token::Token,
+    lexer::token::{Token, TokenKind},
     parser::{Parseable, Parser},
 };
-use crate::lexer::token::TokenKind;
 
 impl<I> Parseable<Directive> for Parser<I>
 where

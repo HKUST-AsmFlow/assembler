@@ -21,7 +21,7 @@ pub enum ParseErrorKind {
     UnexpectedToken {
         expected: TokenKind,
         found: TokenKind,
-    }
+    },
 }
 
 pub struct ParseError {

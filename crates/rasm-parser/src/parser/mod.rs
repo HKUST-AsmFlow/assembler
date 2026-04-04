@@ -16,9 +16,10 @@
 
 use std::iter::Peekable;
 
-use crate::{error::ParseResult, lexer::token::Token};
-use crate::error::{ParseError, ParseErrorKind};
-use crate::lexer::token::TokenKind;
+use crate::{
+    error::{ParseError, ParseErrorKind, ParseResult},
+    lexer::token::{Token, TokenKind},
+};
 
 mod directive;
 mod line;
@@ -52,9 +53,9 @@ where
             Some(token) if token.kind == kind => Ok(token),
             Some(token) => Err(ParseError::new(ParseErrorKind::UnexpectedToken {
                 expected: kind,
-                found: token.kind
+                found: token.kind,
             })),
-            None => Err(ParseError::new(ParseErrorKind::UnexpectedEof))
+            None => Err(ParseError::new(ParseErrorKind::UnexpectedEof)),
         }
     }
 
@@ -66,8 +67,7 @@ where
         while let Some(token) = self.peek() {
             if kinds.as_ref().contains(&token.kind) {
                 self.bump();
-            }
-            else {
+            } else {
                 break;
             }
         }
