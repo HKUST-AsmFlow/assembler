@@ -21,7 +21,10 @@ use rasm_ast::{
     tokenstream::TokenStream,
 };
 use rasm_diagnostics::DiagnosticResult;
-use rasm_lexer::{cursor::Cursor, token::TokenKind};
+use rasm_lexer::{
+    cursor::Cursor,
+    token::{NumericBase, TokenKind},
+};
 use rasm_session::parse::ParserSession;
 use rasm_span::Span;
 
@@ -74,8 +77,8 @@ impl<'session, 'src> Lexer<'session, 'src> {
             let kind = match token.kind {
                 TokenKind::Comment | TokenKind::Whitespace => continue,
                 TokenKind::Identifier => self.identifier(start),
-                TokenKind::Number(base) => todo!(),
-                TokenKind::String { terminated } => todo!(),
+                TokenKind::Number(base) => self.number(start, base),
+                TokenKind::String { terminated } => self.string(start, terminated),
                 TokenKind::Colon => AstTokenKind::Colon,
                 TokenKind::Comma => AstTokenKind::Comma,
                 TokenKind::Dot => AstTokenKind::Dot,
@@ -106,5 +109,13 @@ impl<'session, 'src> Lexer<'session, 'src> {
         let str = self.str_from(start_pos);
 
         AstTokenKind::Identifier(str.to_string())
+    }
+
+    fn number(&mut self, start_pos: u32, base: NumericBase) -> AstTokenKind {
+        todo!()
+    }
+
+    fn string(&mut self, start_pos: u32, temrinated: bool) -> AstTokenKind {
+        todo!()
     }
 }

@@ -16,6 +16,7 @@ rasm-lexer = { path = "crates/rasm-lexer" }
 rasm-session = { path = "crates/rasm-session" }
 rasm-span = { path = "crates/rasm-span" }
 
+codespan-reporting = "0.13.1"
 insta = "1.47.2"
 memchr = "2.8.0"
 unicode-ident = "1.0.24"

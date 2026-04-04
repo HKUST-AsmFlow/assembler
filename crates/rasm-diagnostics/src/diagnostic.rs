@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-pub struct Diagnostic;
+pub struct RasmDiagnostic;
 
-impl !Clone for Diagnostic {}
+impl !Clone for RasmDiagnostic {}

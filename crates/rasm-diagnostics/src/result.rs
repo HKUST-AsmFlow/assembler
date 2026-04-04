@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-use crate::diagnostic::Diagnostic;
+use crate::diagnostic::RasmDiagnostic;
 
-pub type DiagnosticResult<T> = Result<T, Vec<Diagnostic>>;
+pub type DiagnosticResult<T> = Result<T, Vec<RasmDiagnostic>>;
