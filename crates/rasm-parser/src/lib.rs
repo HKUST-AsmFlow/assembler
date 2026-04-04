@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#![feature(default_field_values)]
-
 pub mod error;
 pub mod lexer;
 pub mod parser;

@@ -14,4 +14,14 @@
  * limitations under the License.
  */
 
-pub struct Span;
+#[derive(Debug)]
+pub struct Span {
+    lo: u32,
+    len: u32,
+}
+
+impl Span {
+    pub fn new(lo: u32, len: u32) -> Self {
+        Self { lo, len }
+    }
+}

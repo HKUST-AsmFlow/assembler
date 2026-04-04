@@ -88,7 +88,7 @@ impl<'str> Cursor<'str> {
 
     pub fn next_token(&mut self) -> Token {
         let Some(c) = self.bump() else {
-            return Token::default();
+            return Token::new(TokenKind::Eof, 0);
         };
 
         let kind = match c {
