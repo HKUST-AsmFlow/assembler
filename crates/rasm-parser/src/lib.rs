@@ -18,7 +18,10 @@
 
 use rasm_ast::Program;
 
-use crate::{error::ParseResult, parser::Parser};
+use crate::{
+    error::ParseResult,
+    parser::{Parseable, Parser},
+};
 
 pub mod error;
 pub mod lexer;
@@ -28,5 +31,5 @@ pub fn parse(input: &str) -> ParseResult<Program> {
     let tokens = lexer::tokenize(input);
     let mut parser = Parser::new(tokens);
 
-    parser.parse_program()
+    parser.parse()
 }

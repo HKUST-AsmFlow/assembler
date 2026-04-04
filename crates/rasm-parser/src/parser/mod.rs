@@ -16,8 +16,11 @@
 
 use std::iter::Peekable;
 
-use crate::lexer::token::Token;
+use crate::{error::ParseResult, lexer::token::Token};
+use crate::error::{ParseError, ParseErrorKind};
+use crate::lexer::token::TokenKind;
 
+mod directive;
 mod line;
 mod program;
 
@@ -42,7 +45,35 @@ where
         self.tokens.next()
     }
 
+    pub(crate) fn expect(&mut self, kind: TokenKind) -> ParseResult<Token> {
+        self.skip(&[TokenKind::Whitespace]);
+
+        match self.bump() {
+            Some(token) if token.kind == kind => Ok(token),
+            Some(token) => Err(ParseError::new(ParseErrorKind::UnexpectedToken {
+                expected: kind,
+                found: token.kind
+            })),
+            None => Err(ParseError::new(ParseErrorKind::UnexpectedEof))
+        }
+    }
+
     pub(crate) fn peek(&mut self) -> Option<&Token> {
         self.tokens.peek()
     }
+
+    pub(crate) fn skip(&mut self, kinds: impl AsRef<[TokenKind]>) {
+        while let Some(token) = self.peek() {
+            if kinds.as_ref().contains(&token.kind) {
+                self.bump();
+            }
+            else {
+                break;
+            }
+        }
+    }
+}
+
+pub trait Parseable<T> {
+    fn parse(&mut self) -> ParseResult<T>;
 }

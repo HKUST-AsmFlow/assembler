@@ -16,14 +16,23 @@
 
 use rasm_ast::Line;
 
-use crate::{error::ParseResult, lexer::token::Token, parser::Parser};
+use crate::{
+    error::{ParseError, ParseErrorKind, ParseResult},
+    lexer::token::{Token, TokenKind},
+    parser::{Parseable, Parser},
+};
 
-impl<I> Parser<I>
+impl<I> Parseable<Line> for Parser<I>
 where
     I: Iterator<Item = Token>,
 {
-    pub(crate) fn parse_line(&mut self) -> ParseResult<Line> {
-        // todo
-        Ok(Line::Directive)
+    fn parse(&mut self) -> ParseResult<Line> {
+        let token = self
+            .peek()
+            .ok_or(ParseError::new(ParseErrorKind::UnexpectedEof))?;
+        Ok(match token.kind {
+            TokenKind::Dot => Line::Directive(self.parse()?),
+            _ => todo!(),
+        })
     }
 }

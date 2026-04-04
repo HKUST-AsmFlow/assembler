@@ -19,14 +19,14 @@ use rasm_ast::Program;
 use crate::{
     error::ParseResult,
     lexer::token::{Token, TokenKind},
-    parser::Parser,
+    parser::{Parseable, Parser},
 };
 
-impl<I> Parser<I>
+impl<I> Parseable<Program> for Parser<I>
 where
     I: Iterator<Item = Token>,
 {
-    pub(crate) fn parse_program(&mut self) -> ParseResult<Program> {
+    fn parse(&mut self) -> ParseResult<Program> {
         let mut lines = Vec::new();
 
         while let Some(token) = self.peek() {
@@ -34,7 +34,7 @@ where
                 break;
             }
 
-            lines.push(self.parse_line()?);
+            lines.push(self.parse()?);
         }
 
         Ok(Program { lines })

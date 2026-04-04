@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
+use rasm_ast::Directive;
+
+use crate::{
+    error::ParseResult,
+    lexer::token::Token,
+    parser::{Parseable, Parser},
+};
 use crate::lexer::token::TokenKind;
 
-pub enum ParseErrorKind {
-    UnexpectedEof,
-    UnexpectedToken {
-        expected: TokenKind,
-        found: TokenKind,
+impl<I> Parseable<Directive> for Parser<I>
+where
+    I: Iterator<Item = Token>,
+{
+    fn parse(&mut self) -> ParseResult<Directive> {
+        self.expect(TokenKind::Dot)?;
+        let _ = self.expect(TokenKind::Identifier)?;
+
+        Ok(Directive)
     }
 }
-
-pub struct ParseError {
-    kind: ParseErrorKind,
-}
-
-impl ParseError {
-    pub fn new(kind: ParseErrorKind) -> Self {
-        Self { kind }
-    }
-}
-
-pub type ParseResult<T> = Result<T, ParseError>;

@@ -14,24 +14,4 @@
  * limitations under the License.
  */
 
-use crate::lexer::token::TokenKind;
-
-pub enum ParseErrorKind {
-    UnexpectedEof,
-    UnexpectedToken {
-        expected: TokenKind,
-        found: TokenKind,
-    }
-}
-
-pub struct ParseError {
-    kind: ParseErrorKind,
-}
-
-impl ParseError {
-    pub fn new(kind: ParseErrorKind) -> Self {
-        Self { kind }
-    }
-}
-
-pub type ParseResult<T> = Result<T, ParseError>;
+pub struct Directive;
