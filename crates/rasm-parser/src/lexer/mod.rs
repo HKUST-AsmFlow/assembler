@@ -74,6 +74,8 @@ impl<'session, 'src> Lexer<'session, 'src> {
             let kind = match token.kind {
                 TokenKind::Comment | TokenKind::Whitespace => continue,
                 TokenKind::Identifier => self.identifier(start),
+                TokenKind::Number(base) => todo!(),
+                TokenKind::String { terminated } => todo!(),
                 TokenKind::Colon => AstTokenKind::Colon,
                 TokenKind::Comma => AstTokenKind::Comma,
                 TokenKind::Dot => AstTokenKind::Dot,
