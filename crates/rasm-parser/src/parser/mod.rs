@@ -14,20 +14,32 @@
  * limitations under the License.
  */
 
-#![feature(default_field_values)]
+use std::iter::Peekable;
 
-use rasm_ast::Program;
+use crate::lexer::token::Token;
 
-use crate::error::ParseError;
-use crate::parser::Parser;
+pub struct Parser<I>
+where
+    I: Iterator<Item = Token>,
+{
+    tokens: Peekable<I>,
+}
 
-pub mod lexer;
-pub mod parser;
-pub mod error;
+impl<I> Parser<I>
+where
+    I: Iterator<Item = Token>,
+{
+    pub(crate) fn new(iter: I) -> Self {
+        Self {
+            tokens: iter.peekable(),
+        }
+    }
 
-pub fn parse(input: &str) -> Result<Program, ParseError> {
-    let tokens = lexer::tokenize(input);
-    let _ = Parser::new(tokens);
-    
-    todo!()
+    pub(crate) fn bump(&mut self) -> Option<Token> {
+        self.tokens.next()
+    }
+
+    pub(crate) fn peek(&mut self) -> Option<&Token> {
+        self.tokens.peek()
+    }
 }

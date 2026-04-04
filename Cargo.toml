@@ -10,5 +10,7 @@ rust-version = "1.96.0"
 version = "0.1.0"
 
 [workspace.dependencies]
+rasm-ast = { path = "crates/rasm-ast" }
+
 memchr = "2.8.0"
 unicode-ident = "1.0.24"

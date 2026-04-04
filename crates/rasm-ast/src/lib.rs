@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-#![feature(default_field_values)]
+pub mod program;
 
-use rasm_ast::Program;
-
-use crate::error::ParseError;
-use crate::parser::Parser;
-
-pub mod lexer;
-pub mod parser;
-pub mod error;
-
-pub fn parse(input: &str) -> Result<Program, ParseError> {
-    let tokens = lexer::tokenize(input);
-    let _ = Parser::new(tokens);
-    
-    todo!()
-}
+pub use program::Program;

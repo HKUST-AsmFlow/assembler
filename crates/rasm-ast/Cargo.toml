@@ -1,5 +1,5 @@
 [package]
-name = "rasm-parser"
+name = "rasm-ast"
 authors = { workspace = true }
 edition = { workspace = true }
 license = { workspace = true }
@@ -7,7 +7,3 @@ rust-version = { workspace = true }
 version = { workspace = true }
 
 [dependencies]
-rasm-ast = { workspace = true }
-
-memchr = { workspace = true }
-unicode-ident = { workspace = true }

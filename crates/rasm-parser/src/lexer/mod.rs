@@ -23,7 +23,7 @@ use crate::lexer::{
 };
 
 mod cursor;
-mod token;
+pub mod token;
 mod utils;
 
 impl<'str> Cursor<'str> {
