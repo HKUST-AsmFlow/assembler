@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-use crate::line::Line;
+use crate::nodes::{directive::Directive, label::Label};
 
-pub struct Program {
-    pub lines: Vec<Line>,
+pub enum Line {
+    Directive(Directive),
+    Label(Label),
+    Instruction,
 }

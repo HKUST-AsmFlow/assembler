@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-use rasm_ast::Line;
+use rasm_ast::nodes::Line;
 use rasm_lexer::token::{Token, TokenKind};
 
 use crate::{

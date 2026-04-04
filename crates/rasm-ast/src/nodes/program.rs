@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-use rasm_ast::nodes::Directive;
-use rasm_lexer::token::{Token, TokenKind};
+use crate::nodes::line::Line;
 
-use crate::{
-    error::ParseResult,
-    parser::{Parseable, Parser},
-};
-
-impl<I> Parseable<Directive> for Parser<I>
-where
-    I: Iterator<Item = Token>,
-{
-    fn parse(&mut self) -> ParseResult<Directive> {
-        self.expect(TokenKind::Dot)?;
-        let _ = self.expect(TokenKind::Identifier)?;
-
-        Ok(Directive)
-    }
+pub struct Program {
+    pub lines: Vec<Line>,
 }
