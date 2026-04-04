@@ -45,7 +45,7 @@ impl<'str> Cursor<'str> {
         if ['+', '-'].contains(&self.peek()) {
             self.bump();
         }
-        
+
         let base = match self.peek() {
             'b' => NumericBase::Binary,
             'o' => NumericBase::Octal,
@@ -86,7 +86,7 @@ impl<'str> Cursor<'str> {
 
     pub fn next_token(&mut self) -> Token {
         let Some(c) = self.bump() else {
-            return Token::new(TokenKind::Eof, 0);
+            return Token::default();
         };
 
         let kind = match c {

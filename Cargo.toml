@@ -6,7 +6,7 @@ resolver = "3"
 authors = ["AsmFlow Contributors"]
 edition = "2024"
 license = "Apache-2.0"
-rust-version = "1.94.0"
+rust-version = "1.96.0"
 version = "0.1.0"
 
 [workspace.dependencies]

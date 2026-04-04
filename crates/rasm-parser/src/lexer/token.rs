@@ -50,10 +50,10 @@ pub enum TokenKind {
     Whitespace,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Token {
-    pub kind: TokenKind,
-    pub length: usize,
+    pub kind: TokenKind = TokenKind::Eof,
+    pub length: usize = 0,
 }
 
 impl Token {
