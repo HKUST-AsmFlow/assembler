@@ -8,3 +8,4 @@ version = { workspace = true }
 
 [dependencies]
 rasm-span = { workspace = true }
+rasm-errors = { workspace = true }

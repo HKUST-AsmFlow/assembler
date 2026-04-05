@@ -20,12 +20,15 @@ use rasm_ast::{
     token::{Delimiter, Token, TokenKind},
     tokenstream::{DelimiterSpans, TokenStream, TokenTree},
 };
-use rasm_diagnostics::DiagnosticResult;
+use rasm_errors::DiagnosticResult;
 
 use crate::lexer::Lexer;
 
 impl<'session, 'src> Lexer<'session, 'src> {
-    pub(crate) fn lex_to_tokenstream(&mut self, delimited: bool) -> DiagnosticResult<TokenStream> {
+    pub(crate) fn lex_to_tokenstream(
+        &mut self,
+        delimited: bool,
+    ) -> DiagnosticResult<'session, TokenStream> {
         let mut buf = Vec::new();
         loop {
             if let Some(delimiter) = self.token.kind.open_delimiter() {
@@ -54,7 +57,7 @@ impl<'session, 'src> Lexer<'session, 'src> {
     pub(crate) fn lex_to_tokentree_open_delimiter(
         &mut self,
         delimiter: Delimiter,
-    ) -> DiagnosticResult<TokenTree> {
+    ) -> DiagnosticResult<'session, TokenTree> {
         let open_span = self.token.span;
 
         let stream = self.lex_to_tokenstream(true)?;

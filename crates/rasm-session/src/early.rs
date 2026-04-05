@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-#![feature(negative_impls)]
+use rasm_errors::context::DiagnosticContext;
+use rasm_errors::emitter::AnnotateSnippetEmitter;
 
-pub mod diagnostic;
-pub mod result;
+pub struct EarlyDiagnosticContext {
+    context: DiagnosticContext,
+}
 
-pub use result::DiagnosticResult;
+impl EarlyDiagnosticContext {
+    pub fn new() -> Self {
+        Self {
+            context: DiagnosticContext::new(
+                Box::new(AnnotateSnippetEmitter)
+            ),
+        }
+    }
+}

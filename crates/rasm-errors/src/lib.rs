@@ -14,6 +14,17 @@
  * limitations under the License.
  */
 
-pub fn main() {
-    rasm_driver::main();
-}
+#![feature(associated_type_defaults)]
+#![feature(negative_impls)]
+#![feature(never_type)]
+
+pub mod context;
+pub mod diagnostic;
+pub mod emitter;
+pub mod result;
+pub mod severity;
+pub mod traits;
+
+pub use result::DiagnosticResult;
+
+pub struct ExplicitBug;

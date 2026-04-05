@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-pub struct RasmDiagnostic;
-
-impl !Clone for RasmDiagnostic {}
+pub fn run_assembler() {}

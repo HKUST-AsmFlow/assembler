@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-pub fn main() {
-    rasm_driver::main();
-}
+use crate::diagnostic::RasmDiagnostic;
+
+pub type DiagnosticResult<'diag, T> = Result<T, Vec<RasmDiagnostic<'diag>>>;

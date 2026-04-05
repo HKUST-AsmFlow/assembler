@@ -1,5 +1,5 @@
 [package]
-name = "rasm-diagnostics"
+name = "rasm-errors"
 authors = { workspace = true }
 edition = { workspace = true }
 license = { workspace = true }
@@ -7,4 +7,3 @@ rust-version = { workspace = true }
 version = { workspace = true }
 
 [dependencies]
-codespan-reporting = { workspace = true }

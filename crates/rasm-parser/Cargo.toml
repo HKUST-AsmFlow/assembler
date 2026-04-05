@@ -8,7 +8,7 @@ version = { workspace = true }
 
 [dependencies]
 rasm-ast = { workspace = true }
-rasm-diagnostics = { workspace = true }
+rasm-errors = { workspace = true }
 rasm-lexer = { workspace = true }
 rasm-session = { workspace = true }
 rasm-span = { workspace = true }

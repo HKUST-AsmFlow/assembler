@@ -20,7 +20,7 @@ use rasm_ast::{
     token::{Token, TokenKind as AstTokenKind},
     tokenstream::TokenStream,
 };
-use rasm_diagnostics::DiagnosticResult;
+use rasm_errors::DiagnosticResult;
 use rasm_lexer::{
     cursor::Cursor,
     token::{NumericBase, TokenKind},
@@ -30,11 +30,11 @@ use rasm_span::Span;
 
 mod tokenstream;
 
-pub fn into_tokenstream(
-    session: &ParserSession,
-    src: &str,
+pub fn into_tokenstream<'session, 'src>(
+    session: &'session ParserSession,
+    src: &'src str,
     start_pos: u32,
-) -> DiagnosticResult<TokenStream> {
+) -> DiagnosticResult<'session, TokenStream> {
     let mut lexer = Lexer::new(src, start_pos, session);
     lexer.lex_to_tokenstream(false)
 }

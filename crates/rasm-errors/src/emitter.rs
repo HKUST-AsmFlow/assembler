@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-pub fn main() {
-    rasm_driver::main();
+use crate::diagnostic::RawDiagnostic;
+
+pub struct AnnotateSnippetEmitter;
+
+impl Emitter for AnnotateSnippetEmitter {
+    fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic) {
+        todo!()
+    }
+}
+
+pub trait Emitter {
+    fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic);
 }

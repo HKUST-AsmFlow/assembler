@@ -11,12 +11,14 @@ version = "0.1.0"
 
 [workspace.dependencies]
 rasm-ast = { path = "crates/rasm-ast" }
-rasm-diagnostics = { path = "crates/rasm-diagnostics" }
+rasm-errors = { path = "crates/rasm-errors" }
+rasm-driver = { path = "crates/rasm-driver" }
 rasm-lexer = { path = "crates/rasm-lexer" }
 rasm-session = { path = "crates/rasm-session" }
 rasm-span = { path = "crates/rasm-span" }
 
-codespan-reporting = "0.13.1"
+annotate-snippets = "0.12.14"
+anstream = "1.0.0"
 insta = "1.47.2"
 memchr = "2.8.0"
 unicode-ident = "1.0.24"

@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-use crate::diagnostic::RasmDiagnostic;
-
-pub type DiagnosticResult<T> = Result<T, Vec<RasmDiagnostic>>;
+pub enum Severity {
+    Bug,
+}
