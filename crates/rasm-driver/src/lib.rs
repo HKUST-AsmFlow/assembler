@@ -18,9 +18,11 @@
 
 use std::{panic, panic::PanicHookInfo};
 
-use rasm_errors::context::DiagnosticContext;
-use rasm_errors::emitter::AnnotateSnippetEmitter;
-use rasm_errors::ExplicitBug;
+use rasm_errors::{
+    ExplicitBug,
+    context::DiagnosticContext,
+    emitter::annotate_snippet::{AnnotateSnippetEmitter, stderr_destination},
+};
 
 use crate::session_diagnostics::InternalAssemblerError;
 
@@ -40,7 +42,7 @@ pub fn install_iae_hook(bug_report_url: &'static str, extra_info: fn(&Diagnostic
 }
 
 fn report_ice(info: &PanicHookInfo, bug_report_url: &str, extra_info: fn(&DiagnosticContext)) {
-    let dc = DiagnosticContext::new(Box::new(AnnotateSnippetEmitter));
+    let dc = DiagnosticContext::new(Box::new(AnnotateSnippetEmitter::new(stderr_destination())));
     let dcr = dc.r#ref();
 
     if info.payload().is::<ExplicitBug>() {

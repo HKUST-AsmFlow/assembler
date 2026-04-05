@@ -32,7 +32,7 @@ impl DiagnosticContext {
             inner: Mutex::new(DiagnosticContextInner::new(emitter)),
         }
     }
-    
+
     pub fn r#ref(&self) -> DiagnosticContextRef<'_> {
         DiagnosticContextRef { ctx: self }
     }

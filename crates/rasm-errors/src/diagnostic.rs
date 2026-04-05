@@ -18,6 +18,7 @@ use std::marker::PhantomData;
 
 use crate::{
     context::DiagnosticContextRef,
+    severity::Severity,
     traits::{EmissionProof, ErrorGuarantee},
 };
 
@@ -31,6 +32,14 @@ impl<'diag, G> RasmDiagnostic<'diag, G>
 where
     G: EmissionProof,
 {
+    pub fn new(ctx: DiagnosticContextRef<'diag>, severity: Severity) -> Self {
+        Self {
+            ctx,
+            raw: RawDiagnostic::new(severity),
+            phantom: PhantomData,
+        }
+    }
+
     pub fn emit(self) -> G::Result {
         G::emit(self)
     }
@@ -44,4 +53,12 @@ where
 
 impl<'diag, G> !Clone for RasmDiagnostic<'diag, G> where G: EmissionProof {}
 
-pub struct RawDiagnostic;
+pub struct RawDiagnostic {
+    pub(crate) severity: Severity,
+}
+
+impl RawDiagnostic {
+    pub fn new(severity: Severity) -> Self {
+        Self { severity }
+    }
+}

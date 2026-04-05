@@ -7,3 +7,6 @@ rust-version = { workspace = true }
 version = { workspace = true }
 
 [dependencies]
+annotate-snippets = { workspace = true }
+anstream = { workspace = true }
+colorchoice = { workspace = true }

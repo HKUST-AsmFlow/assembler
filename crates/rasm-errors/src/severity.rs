@@ -13,7 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use annotate_snippets::Level;
 
 pub enum Severity {
     Bug,
+}
+
+impl From<Severity> for Level<'static> {
+    fn from(severity: Severity) -> Self {
+        match severity {
+            Severity::Bug => Level::ERROR.with_name("error: internal assembler error"),
+        }
+    }
 }

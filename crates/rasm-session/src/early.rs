@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-use rasm_errors::context::DiagnosticContext;
-use rasm_errors::emitter::AnnotateSnippetEmitter;
+use rasm_errors::{
+    context::DiagnosticContext,
+    emitter::annotate_snippet::{AnnotateSnippetEmitter, stderr_destination},
+};
 
 pub struct EarlyDiagnosticContext {
     context: DiagnosticContext,
@@ -24,9 +26,9 @@ pub struct EarlyDiagnosticContext {
 impl EarlyDiagnosticContext {
     pub fn new() -> Self {
         Self {
-            context: DiagnosticContext::new(
-                Box::new(AnnotateSnippetEmitter)
-            ),
+            context: DiagnosticContext::new(Box::new(AnnotateSnippetEmitter::new(
+                stderr_destination(),
+            ))),
         }
     }
 }

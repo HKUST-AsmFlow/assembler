@@ -13,15 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-use rasm_errors::context::DiagnosticContextRef;
-use rasm_errors::diagnostic::RasmDiagnostic;
-use rasm_errors::severity::Severity;
-use rasm_errors::traits::{Abort, Diagnostic};
+
+use rasm_errors::{
+    context::DiagnosticContextRef,
+    diagnostic::RasmDiagnostic,
+    severity::Severity,
+    traits::{Abort, Diagnostic},
+};
 
 pub(crate) struct InternalAssemblerError;
 
 impl<'a> Diagnostic<'a, Abort> for InternalAssemblerError {
-    fn into_diagnostic(self, dcr: DiagnosticContextRef<'a>, severity: Severity) -> RasmDiagnostic<'a, Abort> {
-        todo!()
+    fn into_diagnostic(
+        self,
+        dcr: DiagnosticContextRef<'a>,
+        severity: Severity,
+    ) -> RasmDiagnostic<'a, Abort> {
+        RasmDiagnostic::new(dcr, severity)
     }
 }

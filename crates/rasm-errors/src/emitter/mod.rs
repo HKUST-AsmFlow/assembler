@@ -16,13 +16,7 @@
 
 use crate::diagnostic::RawDiagnostic;
 
-pub struct AnnotateSnippetEmitter;
-
-impl Emitter for AnnotateSnippetEmitter {
-    fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic) {
-        todo!()
-    }
-}
+pub mod annotate_snippet;
 
 pub trait Emitter {
     fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic);
