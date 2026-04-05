@@ -15,20 +15,20 @@
  */
 
 use rasm_errors::{
-    context::DiagnosticContextRef,
-    diagnostic::RasmDiagnostic,
-    severity::Severity,
-    traits::{Abort, Diagnostic},
+    context::DiagnosticContextRef, diagnostic::RasmDiagnostic, severity::Severity,
+    traits::Diagnostic,
 };
 
 pub(crate) struct InternalAssemblerError;
 
-impl<'a> Diagnostic<'a, Abort> for InternalAssemblerError {
+impl<'a> Diagnostic<'a> for InternalAssemblerError {
     fn into_diagnostic(
         self,
         dcr: DiagnosticContextRef<'a>,
         severity: Severity,
-    ) -> RasmDiagnostic<'a, Abort> {
-        RasmDiagnostic::new(dcr, severity)
+    ) -> RasmDiagnostic<'a> {
+        let mut diag = RasmDiagnostic::new(dcr, severity);
+        diag.add_message("the assembler unexpectedly panicked. This is a bug.");
+        diag
     }
 }

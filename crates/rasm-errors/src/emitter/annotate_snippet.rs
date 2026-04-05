@@ -76,12 +76,11 @@ impl AnnotateSnippetEmitter {
         Self { dest }
     }
 
-    fn emit_message_default(&mut self, severity: Severity) {
+    fn emit_message_default(&mut self, severity: Severity, messages: &[String]) {
         let renderer = self.renderer();
         let level = Level::from(severity);
 
-        // todo
-        let title = level.primary_title("todo");
+        let title = level.primary_title(messages.iter().map(ToOwned::to_owned).collect::<String>());
 
         let mut report = vec![];
         let group = Group::with_title(title);
@@ -101,7 +100,7 @@ impl AnnotateSnippetEmitter {
 
 impl Emitter for AnnotateSnippetEmitter {
     fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic) {
-        self.emit_message_default(diagnostic.severity)
+        self.emit_message_default(diagnostic.severity, &diagnostic.messages)
     }
 }
 

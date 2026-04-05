@@ -32,6 +32,10 @@ impl<'a> DiagnosticContextRef<'a> {
         bug.into_diagnostic(self, Severity::Bug).emit()
     }
 
+    pub fn emit_error(self, error: impl Diagnostic<'a>) -> ErrorGuarantee {
+        error.into_diagnostic(self, Severity::Error).emit()
+    }
+
     pub fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic) -> Option<ErrorGuarantee> {
         self.inner.lock().ok()?.emit_diagnostic(diagnostic)
     }

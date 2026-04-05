@@ -40,6 +40,10 @@ where
         }
     }
 
+    pub fn add_message(&mut self, message: impl Into<String>) {
+        self.raw.add_message(message);
+    }
+
     pub fn emit(self) -> G::Result {
         G::emit(self)
     }
@@ -55,10 +59,18 @@ impl<'diag, G> !Clone for RasmDiagnostic<'diag, G> where G: EmissionProof {}
 
 pub struct RawDiagnostic {
     pub(crate) severity: Severity,
+    pub messages: Vec<String>,
 }
 
 impl RawDiagnostic {
     pub fn new(severity: Severity) -> Self {
-        Self { severity }
+        Self {
+            severity,
+            messages: Vec::new(),
+        }
+    }
+
+    pub fn add_message(&mut self, message: impl Into<String>) {
+        self.messages.push(message.into());
     }
 }

@@ -17,12 +17,14 @@ use annotate_snippets::Level;
 
 pub enum Severity {
     Bug,
+    Error,
 }
 
 impl From<Severity> for Level<'static> {
     fn from(severity: Severity) -> Self {
         match severity {
             Severity::Bug => Level::ERROR.with_name("error: internal assembler error"),
+            Severity::Error => Level::ERROR,
         }
     }
 }

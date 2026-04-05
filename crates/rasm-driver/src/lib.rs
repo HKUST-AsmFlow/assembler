@@ -23,7 +23,6 @@ use rasm_errors::{
     context::DiagnosticContext,
     emitter::annotate_snippet::{AnnotateSnippetEmitter, stderr_destination},
 };
-
 use crate::session_diagnostics::InternalAssemblerError;
 
 mod runner;
@@ -45,8 +44,8 @@ fn report_ice(info: &PanicHookInfo, bug_report_url: &str, extra_info: fn(&Diagno
     let dc = DiagnosticContext::new(Box::new(AnnotateSnippetEmitter::new(stderr_destination())));
     let dcr = dc.r#ref();
 
-    if info.payload().is::<ExplicitBug>() {
-        dcr.emit_bug(InternalAssemblerError);
+    if !info.payload().is::<ExplicitBug>() {
+        dcr.emit_error(InternalAssemblerError);
     }
 
     extra_info(&dc);
