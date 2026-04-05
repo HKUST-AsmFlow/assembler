@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-use std::sync::Arc;
-
 use rasm_span::sourcemap::SourceMap;
 
 pub struct ParserSession {
-    source_map: Arc<SourceMap>,
+    source_map: SourceMap,
+}
+
+impl ParserSession {
+    pub fn new() -> Self {
+        Self {
+            source_map: SourceMap::new(),
+        }
+    }
 }
 
 impl ParserSession {
     #[inline]
-    pub fn source_map(&self) -> &Arc<SourceMap> {
+    pub fn source_map(&self) -> &SourceMap {
         &self.source_map
     }
 }

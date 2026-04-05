@@ -32,3 +32,20 @@ impl<'a> Diagnostic<'a> for InternalAssemblerError {
         diag
     }
 }
+
+pub(crate) struct IaeBugReportUrl<'a> {
+    pub(crate) url: &'a str,
+}
+
+impl<'a> Diagnostic<'a> for IaeBugReportUrl<'a> {
+    fn into_diagnostic(
+        self,
+        dcr: DiagnosticContextRef<'a>,
+        severity: Severity,
+    ) -> RasmDiagnostic<'a> {
+        let mut diag = RasmDiagnostic::new(dcr, severity);
+        diag.add_message(format!("we would appreciate a bug report: {}", self.url));
+
+        diag
+    }
+}

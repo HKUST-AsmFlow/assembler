@@ -23,7 +23,8 @@ use rasm_errors::{
     context::DiagnosticContext,
     emitter::annotate_snippet::{AnnotateSnippetEmitter, stderr_destination},
 };
-use crate::session_diagnostics::InternalAssemblerError;
+
+use crate::session_diagnostics::{IaeBugReportUrl, InternalAssemblerError};
 
 mod runner;
 mod session_diagnostics;
@@ -35,12 +36,12 @@ pub fn install_iae_hook(bug_report_url: &'static str, extra_info: fn(&Diagnostic
     panic::update_hook(Box::new(
         move |_: &(dyn Fn(&PanicHookInfo) + Send + Sync + 'static), info: &PanicHookInfo| {
             let _ = anstream::stderr().lock();
-            report_ice(info, bug_report_url, extra_info);
+            report_iae(info, bug_report_url, extra_info);
         },
     ));
 }
 
-fn report_ice(info: &PanicHookInfo, bug_report_url: &str, extra_info: fn(&DiagnosticContext)) {
+fn report_iae(info: &PanicHookInfo, bug_report_url: &str, extra_info: fn(&DiagnosticContext)) {
     let dc = DiagnosticContext::new(Box::new(AnnotateSnippetEmitter::new(stderr_destination())));
     let dcr = dc.r#ref();
 
@@ -48,10 +49,17 @@ fn report_ice(info: &PanicHookInfo, bug_report_url: &str, extra_info: fn(&Diagno
         dcr.emit_error(InternalAssemblerError);
     }
 
+    dcr.emit_note(IaeBugReportUrl {
+        url: bug_report_url,
+    });
+
     extra_info(&dc);
 }
 
 pub fn main() {
     install_iae_hook(DEFAULT_BUG_REPORT_URL, |_| {});
-    runner::run_assembler();
+    runner::run_assembler(|assembler| {
+        let session = &assembler.session;
+        let _ = rasm_parser::parse(session);
+    });
 }

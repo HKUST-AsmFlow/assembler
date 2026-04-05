@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+use rasm_ast::nodes::Program;
+use rasm_session::Session;
+
 pub mod error;
 pub mod lexer;
 pub mod parser;
+
+pub fn parse(session: &Session) -> Program {
+    todo!()
+}

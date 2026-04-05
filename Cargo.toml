@@ -14,6 +14,7 @@ rasm-ast = { path = "crates/rasm-ast" }
 rasm-errors = { path = "crates/rasm-errors" }
 rasm-driver = { path = "crates/rasm-driver" }
 rasm-lexer = { path = "crates/rasm-lexer" }
+rasm-parser = { path = "crates/rasm-parser" }
 rasm-session = { path = "crates/rasm-session" }
 rasm-span = { path = "crates/rasm-span" }
 

@@ -14,5 +14,16 @@
  * limitations under the License.
  */
 
-pub mod early;
+use crate::parse::ParserSession;
+
 pub mod parse;
+
+pub fn build_session() -> Session {
+    Session {
+        parser: ParserSession::new()
+    }
+}
+
+pub struct Session {
+    pub parser: ParserSession,
+}

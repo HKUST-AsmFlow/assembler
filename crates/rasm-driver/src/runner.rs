@@ -14,4 +14,23 @@
  * limitations under the License.
  */
 
-pub fn run_assembler() {}
+use std::panic;
+use std::panic::AssertUnwindSafe;
+use rasm_session::Session;
+
+pub struct Assembler {
+    pub session: Session,
+}
+
+pub fn run_assembler<R>(f: impl FnOnce(&Assembler) -> R) -> R {
+    let session = rasm_session::build_session();
+    let assembler = Assembler { session };
+
+    let res = panic::catch_unwind(AssertUnwindSafe(|| f(&assembler)));
+    let res = match res {
+        Ok(res) => res,
+        Err(err) => panic::resume_unwind(err),
+    };
+
+    res
+}

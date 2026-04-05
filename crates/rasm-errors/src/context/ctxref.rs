@@ -23,6 +23,7 @@ use crate::{
     traits::{Abort, Diagnostic, ErrorGuarantee},
 };
 
+#[derive(Clone, Copy)]
 pub struct DiagnosticContextRef<'a> {
     pub(crate) ctx: &'a DiagnosticContext,
 }
@@ -34,6 +35,10 @@ impl<'a> DiagnosticContextRef<'a> {
 
     pub fn emit_error(self, error: impl Diagnostic<'a>) -> ErrorGuarantee {
         error.into_diagnostic(self, Severity::Error).emit()
+    }
+
+    pub fn emit_note(self, note: impl Diagnostic<'a>) -> ErrorGuarantee {
+        note.into_diagnostic(self, Severity::Note).emit()
     }
 
     pub fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic) -> Option<ErrorGuarantee> {
