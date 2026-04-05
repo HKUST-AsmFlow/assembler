@@ -28,3 +28,5 @@ pub mod traits;
 pub use result::DiagnosticResult;
 
 pub struct ExplicitBug;
+
+pub struct FatalError;

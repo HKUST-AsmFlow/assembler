@@ -21,10 +21,8 @@ pub struct ParserSession {
 }
 
 impl ParserSession {
-    pub fn new() -> Self {
-        Self {
-            source_map: SourceMap::new(),
-        }
+    pub fn new(source_map: SourceMap) -> Self {
+        Self { source_map }
     }
 }
 

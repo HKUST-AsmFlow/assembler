@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
+use std::path::PathBuf;
+
+use rasm_span::sourcemap::build_source_map;
+
 use crate::parse::ParserSession;
 
+pub mod early;
 pub mod parse;
 
-pub fn build_session() -> Session {
+pub fn build_session(input_files: &[PathBuf]) -> Session {
     Session {
-        parser: ParserSession::new()
+        parser: ParserSession::new(build_source_map(input_files)),
     }
 }
 

@@ -18,9 +18,9 @@ use std::ops::Deref;
 
 use crate::{
     context::DiagnosticContext,
-    diagnostic::RawDiagnostic,
+    diagnostic::{RasmDiagnostic, RawDiagnostic},
     severity::Severity,
-    traits::{Abort, Diagnostic, ErrorGuarantee},
+    traits::{Abort, Diagnostic, ErrorGuarantee, FatalAbort},
 };
 
 #[derive(Clone, Copy)]
@@ -41,8 +41,12 @@ impl<'a> DiagnosticContextRef<'a> {
         note.into_diagnostic(self, Severity::Note).emit()
     }
 
-    pub fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic) -> Option<ErrorGuarantee> {
+    pub fn emit_diagnostic(self, diagnostic: RawDiagnostic) -> Option<ErrorGuarantee> {
         self.inner.lock().ok()?.emit_diagnostic(diagnostic)
+    }
+
+    pub fn fatal(self, message: impl Into<String>) -> ! {
+        RasmDiagnostic::<FatalAbort>::new(self, Severity::Error, message).emit()
     }
 }
 

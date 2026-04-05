@@ -17,7 +17,8 @@
 use std::panic;
 
 use crate::{
-    ExplicitBug, context::DiagnosticContextRef, diagnostic::RasmDiagnostic, severity::Severity,
+    ExplicitBug, FatalError, context::DiagnosticContextRef, diagnostic::RasmDiagnostic,
+    severity::Severity,
 };
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
@@ -44,6 +45,18 @@ impl ErrorGuarantee {
 impl EmissionProof for ErrorGuarantee {
     fn emit(diagnostic: RasmDiagnostic<Self>) -> Self::Result {
         diagnostic.emit_with_guarantee()
+    }
+}
+
+#[derive(Copy, Clone)]
+pub struct FatalAbort;
+
+impl EmissionProof for FatalAbort {
+    type Result = !;
+
+    fn emit(diag: RasmDiagnostic<Self>) -> Self::Result {
+        diag.emit_with_guarantee();
+        panic::panic_any(FatalError)
     }
 }
 

@@ -27,7 +27,7 @@ impl<'a> Diagnostic<'a> for InternalAssemblerError {
         dcr: DiagnosticContextRef<'a>,
         severity: Severity,
     ) -> RasmDiagnostic<'a> {
-        let mut diag = RasmDiagnostic::new(dcr, severity);
+        let mut diag = RasmDiagnostic::new_empty(dcr, severity);
         diag.add_message("the assembler unexpectedly panicked. This is a bug.");
         diag
     }
@@ -43,7 +43,7 @@ impl<'a> Diagnostic<'a> for IaeBugReportUrl<'a> {
         dcr: DiagnosticContextRef<'a>,
         severity: Severity,
     ) -> RasmDiagnostic<'a> {
-        let mut diag = RasmDiagnostic::new(dcr, severity);
+        let mut diag = RasmDiagnostic::new_empty(dcr, severity);
         diag.add_message(format!("we would appreciate a bug report: {}", self.url));
 
         diag

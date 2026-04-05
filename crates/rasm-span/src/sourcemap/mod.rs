@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-use std::{collections::HashMap, sync::Arc};
+use std::{collections::HashMap, fs, path::PathBuf, sync::Arc};
 
 pub use file::SourceFile;
 
@@ -45,4 +45,16 @@ impl SourceMap {
 
         self.next_start_pos += self.files.last().unwrap().content.len() + 1;
     }
+}
+
+pub fn build_source_map(input_files: &[PathBuf]) -> SourceMap {
+    let mut map = SourceMap::new();
+    input_files.iter().for_each(|file| {
+        map.add_source_file(
+            file.absolute().unwrap().to_string_lossy().to_string(),
+            fs::read_to_string(file).unwrap(),
+        )
+    });
+
+    map
 }

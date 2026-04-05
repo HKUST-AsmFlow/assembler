@@ -12,3 +12,4 @@ rasm-parser = { workspace = true }
 rasm-session = { workspace = true }
 
 anstream = { workspace = true }
+getopts = { workspace = true }

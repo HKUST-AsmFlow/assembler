@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-use std::panic;
-use std::panic::AssertUnwindSafe;
+use std::{panic, panic::AssertUnwindSafe};
+
 use rasm_session::Session;
+
+use crate::args::StructuredOptions;
 
 pub struct Assembler {
     pub session: Session,
 }
 
-pub fn run_assembler<R>(f: impl FnOnce(&Assembler) -> R) -> R {
-    let session = rasm_session::build_session();
+pub fn run_assembler<R>(config: StructuredOptions, f: impl FnOnce(&Assembler) -> R) -> R {
+    let session = rasm_session::build_session(config.input_files());
     let assembler = Assembler { session };
 
     let res = panic::catch_unwind(AssertUnwindSafe(|| f(&assembler)));

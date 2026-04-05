@@ -14,9 +14,25 @@
  * limitations under the License.
  */
 
-#![feature(path_absolute_method)]
+use rasm_errors::{
+    context::DiagnosticContext,
+    emitter::annotate_snippet::{AnnotateSnippetEmitter, stderr_destination},
+};
 
-pub mod sourcemap;
-pub mod span;
+pub struct EarlyDiagnosticContext {
+    dcx: DiagnosticContext,
+}
 
-pub use span::Span;
+impl EarlyDiagnosticContext {
+    pub fn new() -> Self {
+        Self {
+            dcx: DiagnosticContext::new(Box::new(
+                AnnotateSnippetEmitter::new(stderr_destination()),
+            )),
+        }
+    }
+
+    pub fn fatal(&self, message: impl Into<String>) -> ! {
+        self.dcx.r#ref().fatal(message)
+    }
+}

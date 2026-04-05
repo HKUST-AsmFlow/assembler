@@ -32,7 +32,22 @@ impl<'diag, G> RasmDiagnostic<'diag, G>
 where
     G: EmissionProof,
 {
-    pub fn new(ctx: DiagnosticContextRef<'diag>, severity: Severity) -> Self {
+    pub fn new(
+        ctx: DiagnosticContextRef<'diag>,
+        severity: Severity,
+        message: impl Into<String>,
+    ) -> Self {
+        let mut raw = RawDiagnostic::new(severity);
+        raw.add_message(message);
+
+        Self {
+            ctx,
+            raw,
+            phantom: PhantomData,
+        }
+    }
+
+    pub fn new_empty(ctx: DiagnosticContextRef<'diag>, severity: Severity) -> Self {
         Self {
             ctx,
             raw: RawDiagnostic::new(severity),
@@ -48,7 +63,7 @@ where
         G::emit(self)
     }
 
-    pub fn emit_with_guarantee(mut self) -> ErrorGuarantee {
+    pub fn emit_with_guarantee(self) -> ErrorGuarantee {
         let diag = self.raw;
 
         self.ctx.emit_diagnostic(diag).unwrap()
@@ -66,7 +81,7 @@ impl RawDiagnostic {
     pub fn new(severity: Severity) -> Self {
         Self {
             severity,
-            messages: Vec::new(),
+            messages: vec![],
         }
     }
 
