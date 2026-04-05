@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-use rasm_ast::{token::Token, tokenstream::TokenStream};
-use rasm_session::parse::ParserSession;
+use rasm_ast::nodes::Program;
 
-mod program;
+use crate::{
+    error::{ParseError, ParseErrorKind, ParseResult},
+    parser::Parser,
+};
 
-pub struct Parser<'session> {
-    session: &'session ParserSession,
-    token: Token = Token::DUMMY_TOKEN,
-    stream: TokenStream,
-}
-
-impl<'session> Parser<'session> {
-    pub fn new(session: &'session ParserSession, token_stream: TokenStream) -> Self {
-        Self {
-            session,
-            stream: token_stream,
-            ..
-        }
+impl<'a> Parser<'a> {
+    pub fn parse_program(&mut self) -> ParseResult<Program> {
+        Err(ParseError::new(ParseErrorKind::UnexpectedEof))
     }
 }

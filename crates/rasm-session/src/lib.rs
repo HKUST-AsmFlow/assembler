@@ -16,6 +16,10 @@
 
 use std::path::PathBuf;
 
+use rasm_errors::{
+    context::DiagnosticContext,
+    emitter::annotate_snippet::{AnnotateSnippetEmitter, stderr_destination},
+};
 use rasm_span::sourcemap::build_source_map;
 
 use crate::parse::ParserSession;
@@ -24,11 +28,15 @@ pub mod early;
 pub mod parse;
 
 pub fn build_session(input_files: &[PathBuf]) -> Session {
+    let ctxt = DiagnosticContext::new(Box::new(AnnotateSnippetEmitter::new(stderr_destination())));
+
     Session {
-        parser: ParserSession::new(build_source_map(input_files)),
+        parser: ParserSession::with_diagnostic_context(ctxt, build_source_map(input_files)),
+        inputs: input_files.to_vec(),
     }
 }
 
 pub struct Session {
     pub parser: ParserSession,
+    pub inputs: Vec<PathBuf>,
 }

@@ -14,13 +14,52 @@
  * limitations under the License.
  */
 
+#![feature(default_field_values)]
+#![feature(path_absolute_method)]
+
+use std::{path::PathBuf, sync::Arc};
+
 use rasm_ast::nodes::Program;
-use rasm_session::Session;
+use rasm_errors::diagnostic::RasmDiagnostic;
+use rasm_session::{Session, parse::ParserSession};
+use rasm_span::sourcemap::SourceFile;
+
+use crate::{lexer::into_tokenstream, parser::Parser};
 
 pub mod error;
 pub mod lexer;
 pub mod parser;
 
+fn new_parser_from_file<'a>(
+    psess: &'a ParserSession,
+    path: &PathBuf,
+) -> Result<Parser<'a>, Vec<RasmDiagnostic<'a>>> {
+    let sm = psess.source_map();
+    let source_file = sm
+        .get_file(path.absolute().unwrap().to_string_lossy().to_string())
+        .unwrap_or_else(|| {
+            let msg = format!("couldn't read `{}`", path.display());
+            psess.diagnostic_context().fatal(msg);
+        });
+
+    new_parser_from_source_file(psess, source_file)
+}
+
+fn new_parser_from_source_file(
+    psess: &ParserSession,
+    source_file: Arc<SourceFile>,
+) -> Result<Parser<'_>, Vec<RasmDiagnostic<'_>>> {
+    let stream = into_tokenstream(
+        psess,
+        source_file.content.as_ref(),
+        source_file.start_pos as u32,
+    )?;
+    Ok(Parser::new(psess, stream))
+}
+
 pub fn parse(session: &Session) -> Program {
-    todo!()
+    let mut parser =
+        new_parser_from_file(&session.parser, &session.inputs[0]).unwrap_or_else(|diags| todo!());
+
+    parser.parse_program().unwrap()
 }

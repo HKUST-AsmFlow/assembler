@@ -45,6 +45,10 @@ impl SourceMap {
 
         self.next_start_pos += self.files.last().unwrap().content.len() + 1;
     }
+
+    pub fn get_file(&self, path: String) -> Option<Arc<SourceFile>> {
+        self.files.get(*self.map.get(&path)?).cloned()
+    }
 }
 
 pub fn build_source_map(input_files: &[PathBuf]) -> SourceMap {

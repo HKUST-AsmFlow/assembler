@@ -16,6 +16,7 @@
 
 use rasm_lexer::token::TokenKind;
 
+#[derive(Debug)]
 pub enum ParseErrorKind {
     UnexpectedEof,
     UnexpectedToken {
@@ -24,6 +25,7 @@ pub enum ParseErrorKind {
     },
 }
 
+#[derive(Debug)]
 pub struct ParseError {
     kind: ParseErrorKind,
 }

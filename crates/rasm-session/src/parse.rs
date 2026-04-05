@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
+use rasm_errors::context::{DiagnosticContext, DiagnosticContextRef};
 use rasm_span::sourcemap::SourceMap;
 
 pub struct ParserSession {
     source_map: SourceMap,
+    diagnostic_context: DiagnosticContext,
 }
 
 impl ParserSession {
-    pub fn new(source_map: SourceMap) -> Self {
-        Self { source_map }
+    pub fn with_diagnostic_context(ctxt: DiagnosticContext, source_map: SourceMap) -> Self {
+        Self {
+            diagnostic_context: ctxt,
+            source_map,
+        }
     }
 }
 
@@ -30,5 +35,9 @@ impl ParserSession {
     #[inline]
     pub fn source_map(&self) -> &SourceMap {
         &self.source_map
+    }
+
+    pub fn diagnostic_context(&self) -> DiagnosticContextRef {
+        self.diagnostic_context.r#ref()
     }
 }
