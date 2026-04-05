@@ -37,7 +37,7 @@ impl ParserSession {
         &self.source_map
     }
 
-    pub fn diagnostic_context(&self) -> DiagnosticContextRef {
+    pub fn diagnostic_context(&self) -> DiagnosticContextRef<'_> {
         self.diagnostic_context.r#ref()
     }
 }
