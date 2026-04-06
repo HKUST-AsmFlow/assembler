@@ -16,19 +16,34 @@
 
 use rasm_span::Span;
 
-#[derive(Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Delimiter {
     Bracket,
 }
 
-#[derive(Clone, Eq, PartialEq)]
+impl Delimiter {
+    pub fn left(self) -> TokenKind {
+        match self {
+            Self::Bracket => TokenKind::LeftBracket,
+        }
+    }
+
+    pub fn right(self) -> TokenKind {
+        match self {
+            Self::Bracket => TokenKind::RightBracket,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum TokenKind {
     Colon,
     Comma,
     Dot,
-    Identifier(String),
     Eof,
+    Identifier(String),
     LeftBracket,
+    Literal,
     RightBracket,
 }
 
@@ -48,7 +63,7 @@ impl TokenKind {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub struct Token {
     pub kind: TokenKind,
     pub span: Span,

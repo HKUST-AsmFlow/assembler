@@ -16,10 +16,7 @@
 
 use rasm_ast::nodes::Program;
 
-use crate::{
-    error::ParseResult,
-    parser::Parser,
-};
+use crate::{error::ParseResult, parser::Parser};
 
 impl<'a> Parser<'a> {
     pub fn parse_program(&mut self) -> ParseResult<'a, Program> {

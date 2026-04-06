@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct Span {
     lo: u32,
     len: u32,

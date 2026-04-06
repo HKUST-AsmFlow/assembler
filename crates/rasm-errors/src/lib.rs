@@ -25,8 +25,16 @@ pub mod result;
 pub mod severity;
 pub mod traits;
 
+use std::panic;
+
 pub use result::DiagnosticResult;
 
 pub struct ExplicitBug;
 
 pub struct FatalError;
+
+impl FatalError {
+    pub fn raise() -> ! {
+        panic::resume_unwind(Box::new(Self));
+    }
+}

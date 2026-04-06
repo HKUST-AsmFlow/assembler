@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use std::mem;
 
-use rasm_ast::{token::Token, tokenstream::TokenStream};
+use rasm_ast::{
+    token::Token,
+    tokenstream::{TokenStream, TokenStreamCursor},
+};
 use rasm_session::parse::ParserSession;
 
 mod program;
@@ -22,15 +26,21 @@ mod program;
 pub struct Parser<'session> {
     session: &'session ParserSession,
     token: Token = Token::DUMMY_TOKEN,
-    stream: TokenStream,
+    previous_token: Token = Token::DUMMY_TOKEN,
+    cursor: TokenStreamCursor,
 }
 
 impl<'session> Parser<'session> {
     pub fn new(session: &'session ParserSession, token_stream: TokenStream) -> Self {
         Self {
             session,
-            stream: token_stream,
+            cursor: TokenStreamCursor::new(token_stream),
             ..
         }
+    }
+
+    pub fn bump(&mut self) {
+        let next = self.cursor.next();
+        self.previous_token = mem::replace(&mut self.token, next);
     }
 }

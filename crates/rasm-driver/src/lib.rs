@@ -23,7 +23,6 @@ use rasm_errors::{
     ExplicitBug,
     context::DiagnosticContext,
     emitter::annotate_snippet::{AnnotateSnippetEmitter, stderr_destination},
-    traits::FatalAbort,
 };
 use rasm_session::early::EarlyDiagnosticContext;
 
@@ -41,7 +40,8 @@ pub static DEFAULT_BUG_REPORT_URL: &str = "https://github.com/HKUST-AsmFlow/asse
 
 fn install_iae_hook(bug_report_url: &'static str, extra_info: fn(&DiagnosticContext)) {
     panic::update_hook(Box::new(
-        move |default_hook: &(dyn Fn(&PanicHookInfo) + Send + Sync + 'static), info: &PanicHookInfo| {
+        move |default_hook: &(dyn Fn(&PanicHookInfo) + Send + Sync + 'static),
+              info: &PanicHookInfo| {
             let _ = anstream::stderr().lock();
 
             default_hook(info);

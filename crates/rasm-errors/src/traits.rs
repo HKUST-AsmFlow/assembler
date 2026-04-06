@@ -42,7 +42,7 @@ impl ErrorGuarantee {
     }
 
     pub fn raise_fatal(self) -> ! {
-        panic::panic_any(FatalError)
+        FatalError::raise()
     }
 }
 
@@ -60,7 +60,7 @@ impl EmissionProof for FatalAbort {
 
     fn emit(diag: RasmDiagnostic<Self>) -> Self::Result {
         diag.emit_with_guarantee();
-        panic::resume_unwind(Box::new(FatalError));
+        FatalError::raise()
     }
 }
 

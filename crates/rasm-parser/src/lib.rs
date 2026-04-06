@@ -15,12 +15,11 @@
  */
 
 #![feature(default_field_values)]
-#![feature(path_absolute_method)]
 
 use std::{path::PathBuf, sync::Arc};
 
 use rasm_ast::nodes::Program;
-use rasm_errors::diagnostic::RasmDiagnostic;
+use rasm_errors::{FatalError, diagnostic::RasmDiagnostic};
 use rasm_session::{Session, parse::ParserSession};
 use rasm_span::sourcemap::SourceFile;
 
@@ -59,7 +58,12 @@ fn new_parser_from_source_file(
 
 pub fn parse(session: &Session) -> Program {
     let mut parser =
-        new_parser_from_file(&session.parser, &session.inputs[0]).unwrap_or_else(|diags| todo!());
+        new_parser_from_file(&session.parser, &session.inputs[0]).unwrap_or_else(|diags| {
+            diags.into_iter().for_each(|diag| {
+                diag.emit();
+            });
+            FatalError::raise()
+        });
 
     parser.parse_program().unwrap_or_else(|diagnostics| {
         let proof = diagnostics.emit_with_guarantee();

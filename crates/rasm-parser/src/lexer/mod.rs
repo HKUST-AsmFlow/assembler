@@ -107,7 +107,6 @@ impl<'session, 'src> Lexer<'session, 'src> {
 
     fn identifier(&mut self, start_pos: u32) -> AstTokenKind {
         let str = self.str_from(start_pos);
-
         AstTokenKind::Identifier(str.to_string())
     }
 

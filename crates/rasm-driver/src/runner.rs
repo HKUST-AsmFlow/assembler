@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-use std::{panic, panic::AssertUnwindSafe};
+use std::panic::{self, AssertUnwindSafe};
 
 use rasm_session::Session;
 
