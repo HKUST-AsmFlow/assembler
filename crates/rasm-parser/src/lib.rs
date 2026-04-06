@@ -36,7 +36,7 @@ fn new_parser_from_file<'a>(
 ) -> Result<Parser<'a>, Vec<RasmDiagnostic<'a>>> {
     let sm = psess.source_map();
     let source_file = sm
-        .get_file(path.absolute().unwrap().to_string_lossy().to_string())
+        .get_file(path.to_string_lossy().to_string())
         .unwrap_or_else(|| {
             let msg = format!("couldn't read `{}`", path.display());
             psess.diagnostic_context().fatal(msg);
@@ -61,5 +61,8 @@ pub fn parse(session: &Session) -> Program {
     let mut parser =
         new_parser_from_file(&session.parser, &session.inputs[0]).unwrap_or_else(|diags| todo!());
 
-    parser.parse_program().unwrap()
+    parser.parse_program().unwrap_or_else(|diagnostics| {
+        let proof = diagnostics.emit_with_guarantee();
+        proof.raise_fatal();
+    })
 }

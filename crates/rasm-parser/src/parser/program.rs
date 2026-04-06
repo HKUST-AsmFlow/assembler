@@ -17,12 +17,12 @@
 use rasm_ast::nodes::Program;
 
 use crate::{
-    error::{ParseError, ParseErrorKind, ParseResult},
+    error::ParseResult,
     parser::Parser,
 };
 
 impl<'a> Parser<'a> {
-    pub fn parse_program(&mut self) -> ParseResult<Program> {
-        Err(ParseError::new(ParseErrorKind::UnexpectedEof))
+    pub fn parse_program(&mut self) -> ParseResult<'a, Program> {
+        todo!()
     }
 }

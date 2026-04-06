@@ -14,26 +14,6 @@
  * limitations under the License.
  */
 
-use rasm_lexer::token::TokenKind;
+use rasm_errors::diagnostic::RasmDiagnostic;
 
-#[derive(Debug)]
-pub enum ParseErrorKind {
-    UnexpectedEof,
-    UnexpectedToken {
-        expected: TokenKind,
-        found: TokenKind,
-    },
-}
-
-#[derive(Debug)]
-pub struct ParseError {
-    kind: ParseErrorKind,
-}
-
-impl ParseError {
-    pub fn new(kind: ParseErrorKind) -> Self {
-        Self { kind }
-    }
-}
-
-pub type ParseResult<T> = Result<T, ParseError>;
+pub type ParseResult<'a, T> = Result<T, RasmDiagnostic<'a>>;

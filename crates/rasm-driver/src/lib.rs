@@ -41,8 +41,10 @@ pub static DEFAULT_BUG_REPORT_URL: &str = "https://github.com/HKUST-AsmFlow/asse
 
 fn install_iae_hook(bug_report_url: &'static str, extra_info: fn(&DiagnosticContext)) {
     panic::update_hook(Box::new(
-        move |_: &(dyn Fn(&PanicHookInfo) + Send + Sync + 'static), info: &PanicHookInfo| {
+        move |default_hook: &(dyn Fn(&PanicHookInfo) + Send + Sync + 'static), info: &PanicHookInfo| {
             let _ = anstream::stderr().lock();
+
+            default_hook(info);
             report_iae(info, bug_report_url, extra_info);
         },
     ));
@@ -65,10 +67,6 @@ fn handle_options(options: &Options, dcx: &EarlyDiagnosticContext) -> Structured
 }
 
 fn report_iae(info: &PanicHookInfo, bug_report_url: &str, extra_info: fn(&DiagnosticContext)) {
-    if info.payload().is::<FatalAbort>() {
-        return;
-    }
-
     let dc = DiagnosticContext::new(Box::new(AnnotateSnippetEmitter::new(stderr_destination())));
     let dcr = dc.r#ref();
 

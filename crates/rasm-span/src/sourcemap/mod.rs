@@ -55,7 +55,7 @@ pub fn build_source_map(input_files: &[PathBuf]) -> SourceMap {
     let mut map = SourceMap::new();
     input_files.iter().for_each(|file| {
         map.add_source_file(
-            file.absolute().unwrap().to_string_lossy().to_string(),
+            file.to_string_lossy().to_string(),
             fs::read_to_string(file).unwrap(),
         )
     });

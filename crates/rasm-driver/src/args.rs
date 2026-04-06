@@ -25,7 +25,7 @@ pub struct StructuredOptions {
 
 impl StructuredOptions {
     pub fn from_matches(matches: Matches) -> Self {
-        let input_files = matches.free.iter().map(PathBuf::from).collect();
+        let input_files = matches.free[1..].iter().map(PathBuf::from).collect();
         let output_file = matches
             .opt_get_default("o", PathBuf::from("a.out"))
             .unwrap();
