@@ -16,25 +16,27 @@
 use std::mem;
 
 use rasm_ast::{
-    token::Token,
+    token::{Token, TokenKind},
     tokenstream::{TokenStream, TokenStreamCursor},
 };
 use rasm_session::parse::ParserSession;
 
+mod line;
 mod program;
 
 pub struct Parser<'session> {
+    cursor: TokenStreamCursor,
+    expected_tokens: Vec<TokenKind> = vec![],
+    previous_token: Token = Token::DUMMY_TOKEN,
     session: &'session ParserSession,
     token: Token = Token::DUMMY_TOKEN,
-    previous_token: Token = Token::DUMMY_TOKEN,
-    cursor: TokenStreamCursor,
 }
 
 impl<'session> Parser<'session> {
     pub fn new(session: &'session ParserSession, token_stream: TokenStream) -> Self {
         Self {
-            session,
             cursor: TokenStreamCursor::new(token_stream),
+            session,
             ..
         }
     }
@@ -42,5 +44,23 @@ impl<'session> Parser<'session> {
     pub fn bump(&mut self) {
         let next = self.cursor.next();
         self.previous_token = mem::replace(&mut self.token, next);
+    }
+
+    pub fn check(&mut self, expected: TokenKind) -> bool {
+        let ret = self.token.kind == expected;
+        if !ret {
+            self.expected_tokens.push(expected);
+        }
+
+        ret
+    }
+
+    pub fn expect(&mut self, expected: TokenKind) -> bool {
+        let ret = self.check(expected);
+        if ret {
+            self.bump();
+        }
+
+        ret
     }
 }

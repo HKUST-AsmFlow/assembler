@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 
-use rasm_ast::{nodes::Program, token::TokenKind};
+use rasm_ast::nodes::Line;
 
 use crate::{error::ParseResult, parser::Parser};
 
 impl<'a> Parser<'a> {
-    pub(crate) fn parse_program(&mut self) -> ParseResult<'a, Program> {
-        let mut lines = vec![];
-
-        loop {
-            let Some(line) = self.parse_line()? else {
-                break;
-            };
-            lines.push(line)
-        }
-
-        if !self.expect(TokenKind::Eof) {
-            todo!()
-        }
-
-        Ok(Program { lines })
+    pub(crate) fn parse_line(&mut self) -> ParseResult<'a, Option<Line>> {
+        todo!()
     }
 }
