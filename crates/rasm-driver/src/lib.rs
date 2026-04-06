@@ -87,6 +87,10 @@ pub fn main() {
     let options = rasm_optgroups();
     let config = handle_options(&options, &early_dcx);
 
+    if config.input_files().is_empty() {
+        early_dcx.fatal("no input files");
+    }
+
     install_iae_hook(DEFAULT_BUG_REPORT_URL, |_| {});
     runner::run_assembler(config, |assembler| {
         let session = &assembler.session;
