@@ -15,6 +15,7 @@
  */
 
 #![feature(default_field_values)]
+#![feature(trim_prefix_suffix)]
 
 use std::{path::PathBuf, sync::Arc};
 

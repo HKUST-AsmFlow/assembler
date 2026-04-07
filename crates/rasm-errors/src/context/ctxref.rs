@@ -48,6 +48,10 @@ impl<'a> DiagnosticContextRef<'a> {
     pub fn fatal(self, message: impl Into<String>) -> ! {
         RasmDiagnostic::<FatalAbort>::new(self, Severity::Error, message).emit()
     }
+    
+    pub fn structured_fatal(self, message: impl Into<String>) -> RasmDiagnostic<'a, FatalAbort> {
+        RasmDiagnostic::new(self, Severity::Error, message)
+    }
 }
 
 impl Deref for DiagnosticContextRef<'_> {

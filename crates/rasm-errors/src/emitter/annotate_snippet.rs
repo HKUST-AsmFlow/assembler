@@ -76,6 +76,7 @@ impl AnnotateSnippetEmitter {
         Self { dest }
     }
 
+    // todo: take spans into account
     fn emit_message_default(&mut self, severity: Severity, messages: &[String]) {
         let renderer = self.renderer();
         let level = Level::from(severity);

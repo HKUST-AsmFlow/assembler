@@ -31,6 +31,15 @@ impl NumericBase {
             NumericBase::Octal => 8,
         }
     }
+    
+    pub fn str_prefix(&self) -> Option<&'static str> {
+        match self {
+            NumericBase::Binary => Some("b"),
+            NumericBase::Decimal => None,
+            NumericBase::Hexadecimal => Some("h"),
+            NumericBase::Octal => Some("o"),
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

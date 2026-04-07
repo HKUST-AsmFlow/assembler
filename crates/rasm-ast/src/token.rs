@@ -43,8 +43,9 @@ pub enum TokenKind {
     Eof,
     Identifier(String),
     LeftBracket,
-    Literal,
+    Number(i32),
     RightBracket,
+    String(String),
 }
 
 impl TokenKind {

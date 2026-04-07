@@ -112,10 +112,20 @@ impl<'session, 'src> Lexer<'session, 'src> {
     }
 
     fn number(&mut self, start_pos: u32, base: NumericBase) -> AstTokenKind {
-        todo!()
+        let num_str = self.str_from(start_pos);
+        let strip1 = num_str.trim_prefix("#");
+        let strip2 = base.str_prefix().map_or(strip1, |prefix| strip1.trim_prefix(prefix));
+
+        AstTokenKind::Number(strip2.parse().unwrap())
     }
 
-    fn string(&mut self, start_pos: u32, temrinated: bool) -> AstTokenKind {
-        todo!()
+    fn string(&mut self, start_pos: u32, terminated: bool) -> AstTokenKind {
+        if !terminated {
+            self.session.diagnostic_context().structured_fatal("unterminated string")
+                .emit();
+        }
+
+        let str = self.str_from(start_pos);
+        AstTokenKind::String(str.to_string())
     }
 }

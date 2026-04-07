@@ -16,6 +16,8 @@
 
 use std::marker::PhantomData;
 
+use rasm_span::Span;
+
 use crate::{
     context::DiagnosticContextRef,
     severity::Severity,
@@ -68,6 +70,10 @@ where
 
         self.ctx.emit_diagnostic(diag).unwrap()
     }
+
+    pub fn span(&mut self, span: Span) {
+        self.raw.span = span;
+    }
 }
 
 impl<'diag, G> !Clone for RasmDiagnostic<'diag, G> where G: EmissionProof {}
@@ -75,6 +81,7 @@ impl<'diag, G> !Clone for RasmDiagnostic<'diag, G> where G: EmissionProof {}
 pub struct RawDiagnostic {
     pub(crate) severity: Severity,
     pub messages: Vec<String>,
+    pub span: Span,
 }
 
 impl RawDiagnostic {
@@ -82,6 +89,7 @@ impl RawDiagnostic {
         Self {
             severity,
             messages: vec![],
+            span: Span::DUMMY_SPAN,
         }
     }
 
