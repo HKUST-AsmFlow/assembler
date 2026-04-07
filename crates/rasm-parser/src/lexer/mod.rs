@@ -82,6 +82,7 @@ impl<'session, 'src> Lexer<'session, 'src> {
                 TokenKind::Colon => AstTokenKind::Colon,
                 TokenKind::Comma => AstTokenKind::Comma,
                 TokenKind::Dot => AstTokenKind::Dot,
+                TokenKind::Eof => AstTokenKind::Eof,
                 TokenKind::LeftBracket => AstTokenKind::LeftBracket,
                 TokenKind::RightBracket => AstTokenKind::RightBracket,
                 _ => continue,

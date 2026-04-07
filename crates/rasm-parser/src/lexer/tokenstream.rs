@@ -29,6 +29,8 @@ impl<'session, 'src> Lexer<'session, 'src> {
         &mut self,
         delimited: bool,
     ) -> DiagnosticResult<'session, TokenStream> {
+        self.bump();
+
         let mut buf = Vec::new();
         loop {
             if let Some(delimiter) = self.token.kind.open_delimiter() {

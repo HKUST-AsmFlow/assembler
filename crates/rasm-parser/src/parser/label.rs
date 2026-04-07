@@ -13,26 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-use rasm_ast::{nodes::Line, token::TokenKind};
+use rasm_ast::nodes::Label;
 
 use crate::{error::ParseResult, parser::Parser};
 
 impl<'a> Parser<'a> {
-    pub(crate) fn parse_line(&mut self) -> ParseResult<'a, Option<Line>> {
-        self.bump();
-
-        Ok(match self.token.kind {
-            TokenKind::Dot => Some(Line::Directive(self.parse_directive()?)),
-            TokenKind::Identifier(_) => {
-                let tok = self.peek(1, |tok| tok.clone());
-                if tok.kind == TokenKind::Colon {
-                    Some(Line::Label(self.parse_label()?))
-                } else {
-                    Some(Line::Instruction(self.parse_instruction()?))
-                }
-            }
-            _ => None,
-        })
+    pub(crate) fn parse_label(&mut self) -> ParseResult<'a, Label> {
+        todo!()
     }
 }

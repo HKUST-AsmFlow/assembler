@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#![feature(path_absolute_method)]
-
 pub mod sourcemap;
 pub mod span;
 

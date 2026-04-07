@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-use crate::nodes::{directive::Directive, label::Label};
+use crate::nodes::{directive::Directive, instruction::Instruction, label::Label};
 
 pub enum Line {
     Directive(Directive),
     Label(Label),
-    Instruction,
+    Instruction(Instruction),
 }

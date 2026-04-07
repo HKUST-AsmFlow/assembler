@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 use std::mem;
 
 use rasm_ast::{
@@ -21,6 +22,9 @@ use rasm_ast::{
 };
 use rasm_session::parse::ParserSession;
 
+mod directive;
+mod instruction;
+mod label;
 mod line;
 mod program;
 
@@ -62,5 +66,23 @@ impl<'session> Parser<'session> {
         }
 
         ret
+    }
+
+    // LL(k) :)
+    pub fn peek<R>(&self, k: usize, f: impl FnOnce(&Token) -> R) -> R {
+        if k == 0 {
+            return f(&self.token);
+        }
+
+        let mut cursor = self.cursor.clone();
+        let mut i = 0;
+        while i < k - 1 {
+            cursor.next();
+            i += 1;
+        }
+
+        let token = cursor.next();
+
+        f(&token)
     }
 }
