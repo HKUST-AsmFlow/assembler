@@ -18,8 +18,12 @@ use std::{collections::HashMap, fs, path::PathBuf, sync::Arc};
 
 pub use file::SourceFile;
 
+use crate::location::Location;
+use crate::Span;
+
 mod file;
 
+#[derive(Clone)]
 pub struct SourceMap {
     files: Vec<Arc<SourceFile>>,
     map: HashMap<String, usize>,
@@ -48,6 +52,49 @@ impl SourceMap {
 
     pub fn get_file(&self, path: String) -> Option<Arc<SourceFile>> {
         self.files.get(*self.map.get(&path)?).cloned()
+    }
+
+    pub fn lookup_file_index(&self, pos: usize) -> usize {
+        self.files.partition_point(|x| x.start_pos <= pos) - 1
+    }
+
+    pub fn lookup_offset(&self, pos: usize) -> (Arc<SourceFile>, usize) {
+        let file = self.lookup_file_index(pos);
+        let sf = self.files.get(file).unwrap().clone();
+        let offset = pos - sf.start_pos;
+        (sf, offset)
+    }
+
+    pub fn lookup_source_file(&self, pos: usize) -> Arc<SourceFile> {
+        let index = self.lookup_file_index(pos);
+        self.files[index].clone()
+    }
+
+    pub fn lookup_source_location(&self, pos: usize) -> Location {
+        let file = self.lookup_source_file(pos);
+        let (line, column) = file.lookup_pos_as_location(pos);
+
+        Location { file, line, column }
+    }
+
+    pub fn span_to_source<F, T>(&self, sp: Span, f: F) -> T
+    where
+        F: Fn(&str, usize, usize) -> T,
+    {
+        let (start_f, start_pos) = self.lookup_offset(sp.lo as usize);
+        let (end_f, end_pos) = self.lookup_offset((sp.lo + sp.len - 1) as usize);
+
+        assert_eq!(start_f.name, end_f.name);
+
+        f(start_f.content.as_ref(), start_pos, end_pos)
+    }
+
+    pub fn span_to_snippet(&self, sp: Span) -> String {
+        self.span_to_source(sp, |src, start_index, end_index| {
+            src.get(start_index..end_index)
+                .map(ToString::to_string)
+                .unwrap()
+        })
     }
 }
 

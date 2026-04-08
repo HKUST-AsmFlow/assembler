@@ -28,10 +28,14 @@ pub mod early;
 pub mod parse;
 
 pub fn build_session(input_files: &[PathBuf]) -> Session {
-    let ctxt = DiagnosticContext::new(Box::new(AnnotateSnippetEmitter::new(stderr_destination())));
+    let source_map = build_source_map(input_files);
+    let ctxt = DiagnosticContext::new(Box::new(AnnotateSnippetEmitter::new_with_source_map(
+        stderr_destination(),
+        source_map.clone(),
+    )));
 
     Session {
-        parser: ParserSession::with_diagnostic_context(ctxt, build_source_map(input_files)),
+        parser: ParserSession::with_diagnostic_context(ctxt, source_map),
         inputs: input_files.to_vec(),
     }
 }

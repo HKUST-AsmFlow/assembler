@@ -65,7 +65,7 @@ impl<'session, 'src> Lexer<'session, 'src> {
             mem::swap(&mut lo, &mut hi);
         }
 
-        Span::new(lo, hi - lo)
+        Span::new(lo, hi - lo + 1)
     }
 
     pub(crate) fn next_token_from_cursor(&mut self) -> Token {
@@ -114,15 +114,21 @@ impl<'session, 'src> Lexer<'session, 'src> {
     fn number(&mut self, start_pos: u32, base: NumericBase) -> AstTokenKind {
         let num_str = self.str_from(start_pos);
         let strip1 = num_str.trim_prefix("#");
-        let strip2 = base.str_prefix().map_or(strip1, |prefix| strip1.trim_prefix(prefix));
+        let strip2 = base
+            .str_prefix()
+            .map_or(strip1, |prefix| strip1.trim_prefix(prefix));
 
         AstTokenKind::Number(strip2.parse().unwrap())
     }
 
     fn string(&mut self, start_pos: u32, terminated: bool) -> AstTokenKind {
         if !terminated {
-            self.session.diagnostic_context().structured_fatal("unterminated string")
-                .emit();
+            let mut diag = self.session
+                .diagnostic_context()
+                .structured_fatal("unterminated string");
+            diag.span(Span::new(start_pos, self.pos - start_pos + 1));
+            
+            diag.emit();
         }
 
         let str = self.str_from(start_pos);

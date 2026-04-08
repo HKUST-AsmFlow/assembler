@@ -31,7 +31,7 @@ impl NumericBase {
             NumericBase::Octal => 8,
         }
     }
-    
+
     pub fn str_prefix(&self) -> Option<&'static str> {
         match self {
             NumericBase::Binary => Some("b"),

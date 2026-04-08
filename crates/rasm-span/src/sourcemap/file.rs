@@ -42,4 +42,24 @@ impl SourceFile {
             start_pos,
         }
     }
+
+    pub fn lookup_line(&self, pos: usize) -> Option<usize> {
+        self.line_starts
+            .partition_point(|x| *x as usize <= pos)
+            .checked_sub(1)
+    }
+
+    pub fn lookup_pos_as_location(&self, pos: usize) -> (usize, usize) {
+        let relative = pos - self.start_pos;
+        match self.lookup_line(relative) {
+            Some(a) => {
+                let line = a + 1;
+                let line_start = self.line_starts[a];
+                let column = relative - line_start as usize;
+
+                (line, column)
+            }
+            None => (0, relative),
+        }
+    }
 }

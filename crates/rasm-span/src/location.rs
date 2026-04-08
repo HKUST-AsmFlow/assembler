@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-pub mod location;
-pub mod sourcemap;
-pub mod span;
+use std::sync::Arc;
 
-pub use span::Span;
+use crate::sourcemap::SourceFile;
+
+pub struct Location {
+    pub file: Arc<SourceFile>,
+    pub line: usize,
+    pub column: usize,
+}

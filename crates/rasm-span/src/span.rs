@@ -16,8 +16,8 @@
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct Span {
-    lo: u32,
-    len: u32,
+    pub lo: u32,
+    pub len: u32,
 }
 
 impl Span {
@@ -25,5 +25,9 @@ impl Span {
 
     pub const fn new(lo: u32, len: u32) -> Self {
         Self { lo, len }
+    }
+
+    pub fn is_dummy(&self) -> bool {
+        self.lo == 0 && self.len == 0
     }
 }

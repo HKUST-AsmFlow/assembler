@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-use std::{io, io::Write};
-
-use annotate_snippets::{Group, Level, Renderer, renderer::DecorStyle};
+use std::{borrow::Cow, io, io::Write};
+use annotate_snippets::{Annotation, Group, Level, Renderer, Snippet, renderer::DecorStyle, AnnotationKind};
 use anstream::AutoStream;
 use colorchoice::ColorChoice;
+use rasm_span::{Span, location::Location, sourcemap::SourceMap};
 
 use crate::{diagnostic::RawDiagnostic, emitter::Emitter, severity::Severity};
 
@@ -33,7 +33,7 @@ pub fn stderr_destination() -> Destination {
     let buffer_writer = io::stderr();
     let buffer = Vec::new();
     AutoStream::new(
-        Box::new(Buffy {
+        Box::new(BufferedWriter {
             buffer_writer,
             buffer,
         }),
@@ -41,12 +41,12 @@ pub fn stderr_destination() -> Destination {
     )
 }
 
-struct Buffy {
+struct BufferedWriter {
     buffer_writer: io::Stderr,
     buffer: Vec<u8>,
 }
 
-impl Write for Buffy {
+impl Write for BufferedWriter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         self.buffer.write(buf)
     }
@@ -58,7 +58,7 @@ impl Write for Buffy {
     }
 }
 
-impl Drop for Buffy {
+impl Drop for BufferedWriter {
     fn drop(&mut self) {
         if !self.buffer.is_empty() {
             self.flush().unwrap();
@@ -69,23 +69,60 @@ impl Drop for Buffy {
 
 pub struct AnnotateSnippetEmitter {
     dest: Destination,
+    source_map: SourceMap,
 }
 
 impl AnnotateSnippetEmitter {
     pub fn new(dest: Destination) -> Self {
-        Self { dest }
+        Self {
+            dest,
+            source_map: SourceMap::new(),
+        }
     }
 
-    // todo: take spans into account
-    fn emit_message_default(&mut self, severity: Severity, messages: &[String]) {
+    pub fn new_with_source_map(dest: Destination, source_map: SourceMap) -> Self {
+        Self { dest, source_map }
+    }
+
+    fn annotated_snippet<'a>(
+        &self,
+        span: Span,
+        location: Location,
+        file: String,
+    ) -> Snippet<'a, Annotation<'a>> {
+        let source = self.source_map.span_to_snippet(span);
+        Snippet::source(source)
+            .line_start(location.line)
+            .path(file)
+            .annotations(vec![
+                AnnotationKind::span(AnnotationKind::Primary, span.lo as usize..(span.lo + span.len) as usize)
+            ])
+    }
+
+    fn emit_message_default(&mut self, severity: Severity, messages: &[String], span: Span) {
         let renderer = self.renderer();
         let level = Level::from(severity);
 
         let title = level.primary_title(messages.iter().map(ToOwned::to_owned).collect::<String>());
 
         let mut report = vec![];
-        let group = Group::with_title(title);
 
+        let group = Group::with_title(title);
+        if span.is_dummy() {
+            report.push(group);
+
+            let string = renderer.render(&report);
+
+            emit_to_destination(string, &mut self.dest)
+                .expect("failed to write diagnostic to destination");
+            return;
+        }
+
+        let loc = self.source_map.lookup_source_location(span.lo as usize);
+        let name = loc.file.name.to_owned();
+        let snippet = self.annotated_snippet(span, loc, name);
+
+        let group = group.element(snippet);
         report.push(group);
 
         let string = renderer.render(&report);
@@ -101,7 +138,7 @@ impl AnnotateSnippetEmitter {
 
 impl Emitter for AnnotateSnippetEmitter {
     fn emit_diagnostic(&mut self, diagnostic: RawDiagnostic) {
-        self.emit_message_default(diagnostic.severity, &diagnostic.messages)
+        self.emit_message_default(diagnostic.severity, &diagnostic.messages, diagnostic.span)
     }
 }
 
